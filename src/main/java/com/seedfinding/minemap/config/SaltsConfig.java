@@ -59,7 +59,7 @@ public class SaltsConfig extends Config {
             }
             return result;
         }
-        return null;
+        return new LinkedHashMap<>();
     }
 
     public Map<String, Integer> getOverrides(MCVersion version) {

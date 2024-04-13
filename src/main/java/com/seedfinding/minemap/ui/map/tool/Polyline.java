@@ -10,6 +10,7 @@ import com.seedfinding.minemap.util.tsp.Program;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class Polyline extends Tool {
         if (bPosList.size() > 1) {
             return DisplayMaths.getPolylinePolygon(bPosList, offset);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -65,7 +66,7 @@ public class Polyline extends Tool {
         if (bPosList.size() > 1) {
             return DisplayMaths.getPolylinePolygon(bPosList, offset);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override

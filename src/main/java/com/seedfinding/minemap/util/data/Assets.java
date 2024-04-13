@@ -50,7 +50,7 @@ public class Assets {
     public static HashMap<String, Pair<Pair<String, String>, String>> shouldUpdate() {
         String data = getDataRestAPI("https://api.github.com/repos/hube12/MineMap/releases/latest");
         if (data == null) {
-            return null;
+            return new HashMap<>();
         }
         Map<String, Object> map = new Gson().fromJson(data, Map.class);
         if (map.containsKey("tag_name")) {
@@ -83,7 +83,7 @@ public class Assets {
         } else {
             Logger.LOGGER.warning("Github release does not contain a tag_name key.");
         }
-        return null;
+        return new HashMap<>();
     }
 
     public static String downloadLatestMinemap(String url, String filename) {

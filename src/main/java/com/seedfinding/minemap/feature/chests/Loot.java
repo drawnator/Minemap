@@ -15,6 +15,7 @@ import com.seedfinding.mcterrain.TerrainGenerator;
 import com.seedfinding.minemap.init.Logger;
 import com.seedfinding.minemap.ui.map.MapContext;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -33,9 +34,9 @@ public abstract class Loot {
     }
 
     public List<List<ItemStack>> getLootAt(CPos cPos, Feature<?, ?> feature, boolean indexed, MapContext context) {
-        if (context == null || feature == null || cPos == null) return null;
+        if (context == null || feature == null || cPos == null) return new ArrayList<>();
         Pair<TerrainGenerator, Function<CPos, CPos>> generator = context.getTerrainGenerator(feature);
-        if (generator == null) return null;
+        if (generator == null) return new ArrayList<>();
         return getLootAt(context.getWorldSeed(), generator.getSecond().apply(cPos),
             feature, indexed, new ChunkRand(), generator.getFirst(), context.getVersion());
     }
@@ -46,14 +47,14 @@ public abstract class Loot {
 
     public List<List<ItemStack>> getLootAt(long worldSeed, CPos cPos, Feature<?, ?> feature, boolean indexed, ChunkRand rand, TerrainGenerator generator, MCVersion version) {
         Generator.GeneratorFactory<?> factory = this.getGeneratorFactory(feature);
-        if (factory == null) return null;
-        if (!(feature instanceof ILoot)) return null;
-        if (!isCorrectInstance(feature)) return null;
-        if (generator == null) return null;
+        if (factory == null) return new ArrayList<>();
+        if (!(feature instanceof ILoot)) return new ArrayList<>();
+        if (!isCorrectInstance(feature)) return new ArrayList<>();
+        if (generator == null) return new ArrayList<>();
         Generator structureGen = factory.create(version);
-        if (!structureGen.generate(generator, cPos, rand)) return null;
+        if (!structureGen.generate(generator, cPos, rand)) return new ArrayList<>();
         List<ChestContent> loots = ((ILoot) feature).getLoot(worldSeed, structureGen, rand, indexed);
-        if (loots == null) return null;
+        if (loots == null) return new ArrayList<>();
         return loots.stream().map(ChestContent::getItems).collect(Collectors.toList());
     }
 

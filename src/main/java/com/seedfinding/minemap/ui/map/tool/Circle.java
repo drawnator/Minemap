@@ -4,6 +4,7 @@ import com.seedfinding.mccore.util.pos.BPos;
 import com.seedfinding.minemap.util.math.DisplayMaths;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Circle extends Tool {
@@ -46,7 +47,7 @@ public class Circle extends Tool {
 
     @Override
     public List<Shape> getPartialShapes() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -63,7 +64,7 @@ public class Circle extends Tool {
 
     @Override
     public List<Shape> getExactShapes() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
