@@ -93,7 +93,7 @@ public class FileMenu extends Menu {
         };
     }
 
-    public Runnable newSeed() {
+    public final Runnable newSeed() {
         return () -> {
             this.activate.run();
             EnterSeedDialog dialog = new EnterSeedDialog(this.deactivate);
@@ -101,7 +101,7 @@ public class FileMenu extends Menu {
         };
     }
 
-    public Runnable screenshot() {
+    public final Runnable screenshot() {
         return () -> {
             if (!this.screenshot.isEnabled()) return;
 
@@ -125,7 +125,7 @@ public class FileMenu extends Menu {
         };
     }
 
-    public Runnable screenshotFolder() {
+    public final Runnable screenshotFolder() {
         return () -> {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(MineMap.SCREENSHOTS_DIR);
@@ -139,7 +139,7 @@ public class FileMenu extends Menu {
         };
     }
 
-    public Runnable close(boolean displayMsg) {
+    public final Runnable close(boolean displayMsg) {
         return () -> {
             if (isClosing) return;
             int input;

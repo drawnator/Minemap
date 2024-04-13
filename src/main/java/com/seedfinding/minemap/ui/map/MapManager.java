@@ -267,7 +267,7 @@ public class MapManager {
         popup.add(new JSeparator());
     }
 
-    public Runnable updateInit() {
+    public final Runnable updateInit() {
         return () -> SwingUtilities.invokeLater(
             () -> {
                 if (this.panel.leftBar == null || this.panel.leftBar.tooltip == null) {
@@ -334,7 +334,7 @@ public class MapManager {
         };
     }
 
-    public void addTools(JPopupMenu popup, List<Supplier<Tool>> tools) {
+    public final void addTools(JPopupMenu popup, List<Supplier<Tool>> tools) {
         List<JMenuItem> toolMenus = new ArrayList<>();
         for (int i = 0; i < tools.size(); i++) {
             JMenuItem toolMenu = new JMenuItem();

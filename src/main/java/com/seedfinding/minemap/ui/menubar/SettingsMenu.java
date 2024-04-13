@@ -190,7 +190,7 @@ public class SettingsMenu extends Menu {
         }));
     }
 
-    public Runnable changeShortcuts() {
+    public final Runnable changeShortcuts() {
         return () -> {
             this.activate.run();
             JDialog dialog = new ShortcutDialog(this.deactivate);

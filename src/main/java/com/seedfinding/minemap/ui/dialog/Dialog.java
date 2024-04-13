@@ -57,7 +57,7 @@ public abstract class Dialog extends JDialog {
 
     protected abstract void cancel();
 
-    public void registerBindings() {
+    public final void registerBindings() {
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getRootPane().getActionMap();
 

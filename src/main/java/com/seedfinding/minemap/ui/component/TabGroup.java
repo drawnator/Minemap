@@ -48,11 +48,11 @@ public class TabGroup extends JTabbedPane {
         return this.mapPanels.values().stream().anyMatch(MapPanel::isLocked);
     }
 
-    public boolean isLazyLoaded() {
+    public final boolean isLazyLoaded() {
         return lazyLoaded;
     }
 
-    public MCVersion getVersion() {
+    public final MCVersion getVersion() {
         return this.version;
     }
 
@@ -77,7 +77,7 @@ public class TabGroup extends JTabbedPane {
         }
     }
 
-    public void loadEffectively() {
+    public final void loadEffectively() {
         Configs.USER_PROFILE.addRecentSeed(worldSeed, this.version);
         for (Dimension dimension : dimensions) {
             MapPanel mapPanel = new MapPanel(this.getVersion(), dimension, this.worldSeed, threadCount);

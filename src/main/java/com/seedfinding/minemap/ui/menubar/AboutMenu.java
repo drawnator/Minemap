@@ -190,7 +190,7 @@ public class AboutMenu extends Menu {
     }
 
 
-    public Runnable aboutPanel() {
+    public final Runnable aboutPanel() {
         return () -> {
             JFrame frame = new JFrame("About Minemap " + MineMap.version);
 
@@ -227,7 +227,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable iconSize() {
+    public final Runnable iconSize() {
         return () -> {
             this.activate.run();
             JDialog dialog = new IconSizeDialog(this.deactivate);
@@ -235,7 +235,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable cheatingHeight() {
+    public final Runnable cheatingHeight() {
         return () -> {
             this.activate.run();
             JDialog dialog = new CheatingHeightDialog(this.deactivate);
@@ -243,7 +243,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable settingsFolder() {
+    public final Runnable settingsFolder() {
         return () -> {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(MineMap.ROOT_DIR);

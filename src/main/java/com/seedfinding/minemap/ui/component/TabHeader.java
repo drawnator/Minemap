@@ -28,7 +28,7 @@ public class TabHeader extends ExtendedTabbedPane.TabbedPaneHeader {
         this.setOpaque(false);
     }
 
-    public boolean isSaved() {
+    public final boolean isSaved() {
         return isSaved;
     }
 
@@ -76,11 +76,11 @@ public class TabHeader extends ExtendedTabbedPane.TabbedPaneHeader {
         return this.closeButton;
     }
 
-    protected void createTabTitle(String title) {
+    protected final void createTabTitle(String title) {
         this.add(this.tabTitle = new JLabel(title));
     }
 
-    protected void createCloseButton(Consumer<MouseEvent> onClose) {
+    protected final void createCloseButton(Consumer<MouseEvent> onClose) {
         this.closeButton = new CloseButton(12, 5, 1.5F);
         this.lockButton = new LockButton(12, 7, 1.2F, true, new Color(143, 219, 209, 117), false);
         this.closeButton.addMouseListener(Events.Mouse.onPressed(onClose));

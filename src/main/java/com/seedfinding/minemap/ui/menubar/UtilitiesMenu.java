@@ -44,7 +44,7 @@ public class UtilitiesMenu extends Menu {
         this.menu.add(structureSeedMode);
     }
 
-    public Runnable toggleStructureMode(boolean isKeyboard) {
+    public final Runnable toggleStructureMode(boolean isKeyboard) {
         return () -> {
             if (isKeyboard) this.structureSeedMode.setSelected(!this.structureSeedMode.isSelected());
             if (!this.structureSeedMode.isEnabled()) return;
@@ -61,7 +61,7 @@ public class UtilitiesMenu extends Menu {
         };
     }
 
-    public Runnable getNStructure() {
+    public final Runnable getNStructure() {
         return () -> {
             if (!this.listStructure.isEnabled()) return;
             this.activate.run();
@@ -70,7 +70,7 @@ public class UtilitiesMenu extends Menu {
         };
     }
 
-    public Runnable getLoot() {
+    public final Runnable getLoot() {
         return () -> {
             if (!this.lootSearch.isEnabled()) return;
             this.activate.run();
