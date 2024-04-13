@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
 public class Area extends Tool {
@@ -16,9 +17,11 @@ public class Area extends Tool {
     private BPos pos4 = null;
     private int pointsTraced = 0;
     private Color color;
+    private Random rng;
 
-    public Area() {
-        color = DisplayMaths.getRandomColor();
+    public Area(Random rng) {
+        this.rng = rng;
+        color = DisplayMaths.getRandomColor(rng);
     }
 
     @Override
@@ -155,7 +158,7 @@ public class Area extends Tool {
 
     @Override
     public Tool duplicate() {
-        return new Area();
+        return new Area(this.rng);
     }
 
     @Override

@@ -21,10 +21,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WorldTabs extends ExtendedTabbedPane {
@@ -38,9 +35,11 @@ public class WorldTabs extends ExtendedTabbedPane {
     );
     public final JButton closeAllCurrent;
     public TabGroup current;
+    private final Random rng;
 
     public WorldTabs() {
         super(ComponentOrientation.LEFT_TO_RIGHT);
+        this.rng = new Random();
         //Copy seed to clipboard.
         KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
             if (e.getKeyCode() != KeyEvent.VK_C || (e.getModifiersEx() & Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()) == 0) return false;
@@ -101,7 +100,7 @@ public class WorldTabs extends ExtendedTabbedPane {
     }
 
     public TabGroup load(MCVersion version, String worldSeed, int threadCount, Collection<Dimension> dimensions, boolean shouldSwitch) {
-        TabGroup tabGroup = new TabGroup(version, worldSeed, threadCount, dimensions, !shouldSwitch);
+        TabGroup tabGroup = new TabGroup(this.rng, version, worldSeed, threadCount, dimensions, !shouldSwitch);
         if (this.tabGroups.contains(tabGroup)) {
             return null;
         }

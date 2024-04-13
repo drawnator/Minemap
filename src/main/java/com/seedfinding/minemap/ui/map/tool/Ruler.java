@@ -6,15 +6,18 @@ import com.seedfinding.minemap.util.math.DisplayMaths;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Ruler extends Tool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private int pointsTraced = 0;
     private Color color;
+    private Random rng;
 
-    public Ruler() {
-        color = DisplayMaths.getRandomColor();
+    public Ruler(Random rng) {
+        this.rng = rng;
+        color = DisplayMaths.getRandomColor(rng);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class Ruler extends Tool {
 
     @Override
     public Tool duplicate() {
-        return new Ruler();
+        return new Ruler(this.rng);
     }
 
     @Override

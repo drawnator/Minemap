@@ -31,6 +31,7 @@ import java.awt.event.InputEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -53,6 +54,8 @@ public class MapManager {
     public Tool selectedTool = null;
 
     public Point mousePointer;
+
+    private final Random rng;
 
     public MapManager(MapPanel panel) {
         this(panel, DEFAULT_REGION_SIZE);
@@ -173,7 +176,12 @@ public class MapManager {
         portalMenu = new Portal(this.panel);
 
         popup.add(settings);
-        List<Supplier<Tool>> tools = Arrays.asList(Ruler::new, Area::new, Circle::new, Polyline::new);
+        this.rng = new Random();
+        List<Supplier<Tool>> tools = Arrays.asList(
+            () -> new Ruler(rng),
+            () -> new Area(rng),
+            () -> new Circle(rng),
+            () -> new Polyline(rng));
         this.addTools(popup, tools);
         popup.addPopupMenuListener(new PopupMenuListener() {
                                        @Override

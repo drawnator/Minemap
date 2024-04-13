@@ -6,15 +6,18 @@ import com.seedfinding.minemap.util.math.DisplayMaths;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Circle extends Tool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private int pointsTraced = 0;
     private Color color;
+    private Random rng;
 
-    public Circle() {
-        color = DisplayMaths.getRandomColor();
+    public Circle(Random rng) {
+        this.rng = rng;
+        color = DisplayMaths.getRandomColor(this.rng);
     }
 
     @Override
@@ -139,7 +142,7 @@ public class Circle extends Tool {
 
     @Override
     public Tool duplicate() {
-        return new Circle();
+        return new Circle(this.rng);
     }
 
     @Override

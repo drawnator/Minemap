@@ -207,8 +207,7 @@ public class DisplayMaths {
         return ellipse;
     }
 
-    public static Color getRandomColor() {
-        Random rand = new Random();
+    public static Color getRandomColor(Random rand) {
         float r = rand.nextFloat();
         float g = rand.nextFloat();
         float b = rand.nextFloat();
