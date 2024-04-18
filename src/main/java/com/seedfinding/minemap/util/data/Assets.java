@@ -348,7 +348,7 @@ public class Assets {
     private static JsonReader openJSON(File file) {
         BufferedReader fileReader;
         try {
-            fileReader = Files.newBufferedReader(Paths.get(file.getPath()),StandardCharsets.UTF_8);
+            fileReader = Files.newBufferedReader(Paths.get(file.getPath()));
         } catch (FileNotFoundException e) {
             Logger.LOGGER.severe(String.format("Could not open file at %s, error: %s", file.getAbsolutePath(), e));
             return null;
