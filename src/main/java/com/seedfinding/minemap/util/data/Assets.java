@@ -245,7 +245,7 @@ public class Assets {
             }
             Files.createDirectories(extractedFile.toPath().getParent());
             InputStream is = jar.getInputStream(entry); // get the input stream
-            FileOutputStream fos = new FileOutputStream(extractedFile);
+            OutputStream fos = Files.newOutputStream(Paths.get(extractedFile.getPath()));
             while (is.available() > 0) {  // write contents of 'is' to 'fos'
                 fos.write(is.read());
             }
@@ -266,8 +266,8 @@ public class Assets {
             return false;
         }
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(out);
-            fileOutputStream.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            OutputStream fileOutputStream = Files.newOutputStream(Paths.get(out.getPath()));
+            fileOutputStream.write(rbc.toString().getBytes(),0,Integer.MAX_VALUE);//.transferFrom(rbc, 0, Long.MAX_VALUE);
             fileOutputStream.close();
         } catch (IOException e) {
             Logger.LOGGER.severe(String.format("Could not download from channel to url %s for file %s, error: %s", url, out.getAbsolutePath(), e));
@@ -346,12 +346,14 @@ public class Assets {
 
 
     private static JsonReader openJSON(File file) {
-        FileReader fileReader;
+        BufferedReader fileReader;
         try {
-            fileReader = new FileReader(file);
+            fileReader = Files.newBufferedReader(Paths.get(file.getPath()),StandardCharsets.UTF_8);
         } catch (FileNotFoundException e) {
             Logger.LOGGER.severe(String.format("Could not open file at %s, error: %s", file.getAbsolutePath(), e));
             return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return new JsonReader(fileReader);
     }
@@ -398,7 +400,7 @@ public class Assets {
 
     private static String getFileChecksum(MessageDigest digest, File file) {
         try {
-            FileInputStream fis = new FileInputStream(file);
+            InputStream fis = Files.newInputStream(Paths.get(file.getPath()));
 
             byte[] byteArray = new byte[1024];
             int bytesCount;
@@ -448,7 +450,7 @@ public class Assets {
         }
         for (Path path : paths) {
             try {
-                InputStream inputStream = isJar ? Icons.class.getResourceAsStream(path.toString()) : new FileInputStream(path.toString());
+                InputStream inputStream = isJar ? Icons.class.getResourceAsStream(path.toString()) : Files.newInputStream(Paths.get(path.toString()));
                 if (inputStream == null) {
                     LOGGER.severe(String.format("Input stream is null, %s", path));
                     return list;
