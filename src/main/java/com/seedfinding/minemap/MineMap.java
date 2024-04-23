@@ -130,19 +130,9 @@ public class MineMap extends JFrame {
             System.out.println("No pos argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
             return;
         }
-        if (Arrays.asList(args).contains("--size")) {
-            Integer idx = getSizeIdx(args);
-            if (idx == null) return;
-            try {
-                size = Integer.parseInt(args[idx + 1]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid size provided, should be numeric");
-                return;
-            }
-        } else {
-            System.err.println("No size argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
+        Integer sizeOrNull = getSize(args);
+        if (sizeOrNull == null) return;
+        size = sizeOrNull;
         MapSettings settings = new MapSettings(version, OVERWORLD).refresh();
         MapContext context = new MapContext(seed, settings);
         settings.hide(SlimeChunk.class, Mineshaft.class);
@@ -150,6 +140,23 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer getSize(String[] args){
+        Integer size = null;
+        if (Arrays.asList(args).contains("--size")) {
+            Integer idx = getSizeIdx(args);
+            if (idx == null) return size;
+            try {
+                size = Integer.parseInt(args[idx + 1]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid size provided, should be numeric");
+                return null;
+            }
+        } else {
+            System.err.println("No size argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return size;
     }
 
     private static MCVersion getVersion(String[] args){
