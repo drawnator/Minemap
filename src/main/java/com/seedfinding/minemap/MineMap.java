@@ -122,6 +122,10 @@ public class MineMap extends JFrame {
         Integer sizeOrNull = getSize(args);
         if (sizeOrNull == null) return;
         size = sizeOrNull;
+        instantiateScreenshot(version, seed, blockX, blockZ, size);
+    }
+
+    private static void instantiateScreenshot(MCVersion version, long seed, int blockX, int blockZ, int size) throws IOException {
         MapSettings settings = new MapSettings(version, OVERWORLD).refresh();
         MapContext context = new MapContext(seed, settings);
         settings.hide(SlimeChunk.class, Mineshaft.class);
