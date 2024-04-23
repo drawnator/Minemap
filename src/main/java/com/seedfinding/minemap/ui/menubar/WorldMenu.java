@@ -13,14 +13,14 @@ import com.seedfinding.minemap.ui.dialog.CoordHopperDialog;
 import com.seedfinding.minemap.ui.dialog.SaltDialog;
 import com.seedfinding.minemap.ui.dialog.StructureHopperDialog;
 import com.seedfinding.minemap.ui.map.MapPanel;
-import com.seedfinding.minemap.ui.map.icon.IconRenderer;
+import com.seedfinding.minemap.ui.map.icon.AbstractIconRenderer;
 import com.seedfinding.minemap.ui.map.icon.SpawnIcon;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 
-public class WorldMenu extends Menu {
+public class WorldMenu extends AbstractMenu {
     private final JMenuItem goToCoords;
     private final JMenuItem goToSpawn;
     private final JMenuItem loadShadowSeed;
@@ -129,7 +129,7 @@ public class WorldMenu extends Menu {
 
     private BPos getActiveSpawn() {
         MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
-        IconRenderer icon = map.getContext().getIconManager().getFor(SpawnPoint.class);
+        AbstractIconRenderer icon = map.getContext().getIconManager().getFor(SpawnPoint.class);
         return icon instanceof SpawnIcon ? ((SpawnIcon) icon).getPos() : null;
     }
 

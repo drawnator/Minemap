@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class KeyboardsConfig extends Config {
+public class KeyboardsConfig extends AbtractConfig {
     @Expose
     protected Map<KeyShortcuts.ShortcutAction, String> KEYBOARDS = new LinkedHashMap<>();
     @Expose

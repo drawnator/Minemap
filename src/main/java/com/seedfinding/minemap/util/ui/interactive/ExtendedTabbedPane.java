@@ -84,10 +84,10 @@ public class ExtendedTabbedPane extends JPanel {
         this.getJTabbedPane().removeAll();
     }
 
-    public TabbedPaneHeader getSelectedHeader() {
+    public AbstractTabbedPaneHeader getSelectedHeader() {
         if (this.getJTabbedPane().getSelectedIndex() < 0) return null;
         Component c = this.getJTabbedPane().getTabComponentAt(this.getJTabbedPane().getSelectedIndex());
-        return c instanceof TabbedPaneHeader ? (TabbedPaneHeader) c : null;
+        return c instanceof AbstractTabbedPaneHeader ? (AbstractTabbedPaneHeader) c : null;
     }
 
     public Component getSelectedComponent() {
@@ -100,20 +100,20 @@ public class ExtendedTabbedPane extends JPanel {
     }
 
     public void addTab(String title, Component panel, HeaderFactory headerCreator) {
-        TabbedPaneHeader header = headerCreator.create(title);
+        AbstractTabbedPaneHeader header = headerCreator.create(title);
         tabbedPane.setTabComponentAt(this.addTabAndGetIndex(title, panel), header);
     }
 
-    public void addTab(String title, Component panel, TabbedPaneHeader headerCreator) {
+    public void addTab(String title, Component panel, AbstractTabbedPaneHeader headerCreator) {
         tabbedPane.setTabComponentAt(this.addTabAndGetIndex(title, panel), headerCreator);
     }
 
     @FunctionalInterface
     public interface HeaderFactory {
-        TabbedPaneHeader create(String title);
+        AbstractTabbedPaneHeader create(String title);
     }
 
-    public abstract static class TabbedPaneHeader extends JPanel {
+    public abstract static class AbstractTabbedPaneHeader extends JPanel {
 
     }
 

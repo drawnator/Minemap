@@ -14,7 +14,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 import java.util.List;
 import java.util.function.Function;
 
-public class RegionIcon extends StaticIcon {
+public class RegionIcon extends AbstractStaticIcon {
 
     public RegionIcon(MapContext context) {
         super(context);

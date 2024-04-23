@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class IconsConfig extends Config {
+public class IconsConfig extends AbtractConfig {
     @Expose
     protected Map<String, Double> ICON_SIZES = new LinkedHashMap<>();
     @Expose

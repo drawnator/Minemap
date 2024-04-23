@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 
 import static com.seedfinding.minemap.config.KeyboardsConfig.getKeyComboString;
 
-public class SettingsMenu extends Menu {
+public class SettingsMenu extends AbstractMenu {
     private final JMenu metric;
     private final JMenu modifierKey;
     private final JMenuItem shortcuts;

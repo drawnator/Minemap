@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Circle extends Tool {
+public class Circle extends AbstractTool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private int pointsTraced = 0;
@@ -141,7 +141,7 @@ public class Circle extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
+    public AbstractTool duplicate() {
         return new Circle(this.rng);
     }
 

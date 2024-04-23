@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Ruler extends Tool {
+public class Ruler extends AbstractTool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private int pointsTraced = 0;
@@ -132,7 +132,7 @@ public class Ruler extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
+    public AbstractTool duplicate() {
         return new Ruler(this.rng);
     }
 

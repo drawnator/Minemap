@@ -2,7 +2,7 @@ package com.seedfinding.minemap.util.ui.buttons;
 
 import java.awt.*;
 
-public class LockButton extends ButtonIcon {
+public class LockButton extends AbstractButtonIcon {
 
     public LockButton(int size, int inset, float factor, boolean background, Color backgroundColor, boolean border) {
         super(size, inset, factor, background, backgroundColor, border);

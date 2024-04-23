@@ -6,7 +6,7 @@ import com.seedfinding.mccore.util.pos.RPos;
 import com.seedfinding.minemap.init.Configs;
 import com.seedfinding.minemap.init.Logger;
 import com.seedfinding.minemap.ui.map.MapPanel;
-import com.seedfinding.minemap.ui.map.tool.Tool;
+import com.seedfinding.minemap.ui.map.tool.AbstractTool;
 import com.seedfinding.minemap.util.data.DrawInfo;
 
 import javax.swing.*;
@@ -30,7 +30,7 @@ public class FragmentScheduler {
         public void drawFeatures(Graphics graphics, DrawInfo info) {}
 
         @Override
-        public void drawTools(Graphics graphics, DrawInfo info, ArrayList<Tool> tools) {}
+        public void drawTools(Graphics graphics, DrawInfo info, ArrayList<AbstractTool> tools) {}
     };
     public List<RPos> scheduledRegions = Collections.synchronizedList(new ArrayList<>());
     protected ThreadPool executor;

@@ -5,7 +5,7 @@ import com.seedfinding.minemap.listener.Events;
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 
-public abstract class Menu {
+public abstract class AbstractMenu {
     protected JMenu menu;
     private boolean isActive = false;
     protected final Runnable deactivate = () -> isActive = false;

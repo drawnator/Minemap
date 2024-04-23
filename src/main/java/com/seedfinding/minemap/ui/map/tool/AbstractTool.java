@@ -5,7 +5,7 @@ import com.seedfinding.mccore.util.pos.BPos;
 import java.awt.*;
 import java.util.List;
 
-public abstract class Tool {
+public abstract class AbstractTool {
 
     public abstract int getPointsTraced();
 
@@ -36,7 +36,7 @@ public abstract class Tool {
     // allow to use technics to hide the fragment sides
     public abstract boolean shouldHideArtefact();
 
-    public abstract Tool duplicate();
+    public abstract AbstractTool duplicate();
 
     public abstract Color getColor();
 

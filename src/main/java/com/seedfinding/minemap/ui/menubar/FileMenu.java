@@ -23,7 +23,7 @@ import java.util.Calendar;
 import static com.seedfinding.minemap.config.KeyboardsConfig.getKeyComboString;
 import static com.seedfinding.minemap.config.UserProfileConfig.MAX_SIZE;
 
-public class FileMenu extends Menu {
+public class FileMenu extends AbstractMenu {
     private final JMenuItem loadSeed;
     private final JMenu recentSeeds;
     private final JMenuItem screenshot;

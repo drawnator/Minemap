@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
-public class TabHeader extends ExtendedTabbedPane.TabbedPaneHeader {
+public class TabHeader extends ExtendedTabbedPane.AbstractTabbedPaneHeader {
 
     protected JLabel tabTitle;
     protected JButton closeButton;

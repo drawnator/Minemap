@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SaltsConfig extends Config {
+public class SaltsConfig extends AbtractConfig {
     // can't use the enum as the key as it is not correctly deserialized by GSON
     @Expose
     protected Map<String, Map<String, Integer>> SALTS = new LinkedHashMap<>();

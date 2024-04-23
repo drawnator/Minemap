@@ -11,10 +11,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public abstract class Dialog extends JDialog {
+public abstract class AbstractDialog extends JDialog {
     private Runnable runAtExit;
 
-    public Dialog(String title, LayoutManager layout) {
+    public AbstractDialog(String title, LayoutManager layout) {
         this.setModalityType(ModalityType.APPLICATION_MODAL);
         this.setIconImage(Icons.get(MineMap.class));
         this.setTitle(title);

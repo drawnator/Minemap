@@ -14,7 +14,7 @@ import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 
-public class UtilitiesMenu extends Menu {
+public class UtilitiesMenu extends AbstractMenu {
     public JMenuItem structureSeedMode;
     public JMenuItem listStructure;
     public JMenuItem lootSearch;

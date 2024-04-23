@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Area extends Tool {
+public class Area extends AbstractTool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private BPos pos3 = null;
@@ -157,7 +157,7 @@ public class Area extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
+    public AbstractTool duplicate() {
         return new Area(this.rng);
     }
 

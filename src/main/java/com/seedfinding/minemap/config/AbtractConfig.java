@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Locale;
 
-public abstract class Config {
+public abstract class AbtractConfig {
 
     public static class LocaleAgnosticFieldNamingStrategy implements FieldNamingStrategy {
         @Override
@@ -65,9 +65,9 @@ public abstract class Config {
 
     public abstract String getName();
 
-    public Config readConfig() {
+    public AbtractConfig readConfig() {
         try {
-                Config config = GSON.fromJson(Files.newBufferedReader(Paths.get(this.getConfigFile().getPath())), this.getClass());
+                AbtractConfig config = GSON.fromJson(Files.newBufferedReader(Paths.get(this.getConfigFile().getPath())), this.getClass());
             if (config == null) throw new Exception("WTF");
             return config;
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public abstract class Config {
         return this;
     }
 
-    public Config forceGenerateConfig() {
+    public AbtractConfig forceGenerateConfig() {
         this.generateConfig();
         return this;
     }

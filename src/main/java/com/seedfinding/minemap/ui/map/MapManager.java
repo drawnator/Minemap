@@ -43,7 +43,7 @@ public class MapManager {
     public static final int DEFAULT_REGION_SIZE = 512;//8192;
     public static final double DEFAULT_PIXELS_PER_FRAGMENT = 256.0;
     public int blocksPerFragment;
-    public final ArrayList<Tool> toolsList = new ArrayList<>();
+    public final ArrayList<AbstractTool> toolsList = new ArrayList<>();
     private final MapPanel panel;
     public final JPopupMenu popup;
     private final ChestFrame chestWindows;
@@ -51,7 +51,7 @@ public class MapManager {
     public double pixelsPerFragment;
     public double centerX;
     public double centerY;
-    public Tool selectedTool = null;
+    public AbstractTool selectedTool = null;
 
     public Point mousePointer;
 
@@ -177,7 +177,7 @@ public class MapManager {
 
         popup.add(settings);
         this.rng = new Random();
-        List<Supplier<Tool>> tools = Arrays.asList(
+        List<Supplier<AbstractTool>> tools = Arrays.asList(
             () -> new Ruler(rng),
             () -> new Area(rng),
             () -> new Circle(rng),
@@ -342,7 +342,7 @@ public class MapManager {
         };
     }
 
-    public final void addTools(JPopupMenu popup, List<Supplier<Tool>> tools) {
+    public final void addTools(JPopupMenu popup, List<Supplier<AbstractTool>> tools) {
         List<JMenuItem> toolMenus = new ArrayList<>();
         for (int i = 0; i < tools.size(); i++) {
             JMenuItem toolMenu = new JMenuItem();
@@ -351,7 +351,7 @@ public class MapManager {
         }
         Consumer<Pair<String, String>> rTools = prefix -> {
             for (int i = 0; i < tools.size(); i++) {
-                Tool currentTool = tools.get(i).get();
+                AbstractTool currentTool = tools.get(i).get();
                 toolMenus.get(i).setText(String.join(" ",
                     selectedTool != null && selectedTool.getName().equals(currentTool.getName()) ?
                         prefix.getSecond() : prefix.getFirst(), currentTool.getName()));
@@ -359,15 +359,15 @@ public class MapManager {
         };
         rTools.accept(new Pair<>("Enable", "Disable"));
 
-        BiConsumer<Tool, JMenuItem> createNewTool = (newTool, menuItem) -> {
+        BiConsumer<AbstractTool, JMenuItem> createNewTool = (newTool, menuItem) -> {
             toolsList.add(newTool);
             selectedTool = newTool;
             this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
             menuItem.setText("Disable " + newTool.getName());
         };
 
-        BiConsumer<Supplier<Tool>, JMenuItem> toggleTool = (newTool, menuItem) -> {
-            Tool tool = newTool.get(); // to avoid creating an instance at one point
+        BiConsumer<Supplier<AbstractTool>, JMenuItem> toggleTool = (newTool, menuItem) -> {
+            AbstractTool tool = newTool.get(); // to avoid creating an instance at one point
             if (selectedTool == null) {
                 createNewTool.accept(tool, menuItem);
             } else {
@@ -388,13 +388,13 @@ public class MapManager {
 
         for (int i = 0; i < tools.size(); i++) {
             JMenuItem toolMenu = toolMenus.get(i);
-            Supplier<Tool> tool = tools.get(i);
+            Supplier<AbstractTool> tool = tools.get(i);
             toolMenu.addMouseListener(Events.Mouse.onReleased(e -> toggleTool.accept(tool, toolMenu)));
             popup.add(toolMenu);
         }
     }
 
-    public void removeTool(Tool tool) {
+    public void removeTool(AbstractTool tool) {
         if (selectedTool == tool) {
             selectedTool = tool.duplicate();
             selectedTool.reset();

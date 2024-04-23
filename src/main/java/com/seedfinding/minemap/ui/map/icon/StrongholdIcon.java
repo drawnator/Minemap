@@ -13,7 +13,7 @@ import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
-public class StrongholdIcon extends StaticIcon {
+public class StrongholdIcon extends AbstractStaticIcon {
 
 
     public StrongholdIcon(MapContext context) {

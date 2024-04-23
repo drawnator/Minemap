@@ -9,7 +9,6 @@ import com.seedfinding.minemap.ui.dialog.CheatingHeightDialog;
 import com.seedfinding.minemap.ui.dialog.IconSizeDialog;
 import com.seedfinding.minemap.ui.map.MapPanel;
 import com.seedfinding.minemap.util.ui.interactive.LabelController;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -23,7 +22,7 @@ import java.net.URISyntaxException;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 
-public class AboutMenu extends Menu {
+public class AboutMenu extends AbstractMenu {
 
     private final JMenu lookMenu;
     private final Box lookMenuLight;

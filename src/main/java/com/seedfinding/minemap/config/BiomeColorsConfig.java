@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class BiomeColorsConfig extends Config {
+public class BiomeColorsConfig extends AbtractConfig {
 
     public static final String DEFAULT_STYLE_NAME = "Default";
     public final static HashMap<Biome, String> BIOME_COLORS = new LinkedHashMap<>();

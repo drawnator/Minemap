@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.function.IntUnaryOperator;
 
 
-public class CoordHopperDialog extends Dialog {
+public class CoordHopperDialog extends AbstractDialog {
 
     public JTextField enterX;
     public JTextField enterZ;

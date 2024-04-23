@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class IconManager {
 
     private final MapContext context;
-    public Map<Feature<?, ?>, IconRenderer> renderers;
+    public Map<Feature<?, ?>, AbstractIconRenderer> renderers;
 
     public IconManager(MapContext context) {
         this.context = context;
@@ -47,18 +47,18 @@ public class IconManager {
         return this.override(c -> NullIcon.INSTANCE);
     }
 
-    public IconRenderer getFor(Feature<?, ?> feature) {
+    public AbstractIconRenderer getFor(Feature<?, ?> feature) {
         return this.renderers.get(feature);
     }
 
-    public IconRenderer getFor(Class<? extends Feature<?, ?>> feature) {
+    public AbstractIconRenderer getFor(Class<? extends Feature<?, ?>> feature) {
         return this.getFor(this.context.getSettings().getFeatureOfType(feature));
     }
 
     @SafeVarargs
-    public final IconManager override(Function<MapContext, IconRenderer>... renderers) {
-        for (Function<MapContext, IconRenderer> factory : renderers) {
-            IconRenderer renderer = factory.apply(this.getContext());
+    public final IconManager override(Function<MapContext, AbstractIconRenderer>... renderers) {
+        for (Function<MapContext, AbstractIconRenderer> factory : renderers) {
+            AbstractIconRenderer renderer = factory.apply(this.getContext());
             for (Feature<?, ?> feature : new ArrayList<>(this.renderers.keySet())) {
                 if (!renderer.isValidFeature(feature)) continue;
                 this.renderers.replace(feature, renderer);

@@ -21,7 +21,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class Loot {
+public abstract class AbstractLoot {
 
     public static final Predicate<ItemStack> ENCHANTED_GAPPLES_PRED = e -> e.getItem().equals(Items.ENCHANTED_GOLDEN_APPLE);
 
@@ -75,7 +75,7 @@ public abstract class Loot {
     }
 
     @FunctionalInterface
-    public interface LootFactory<T extends Loot> {
+    public interface LootFactory<T extends AbstractLoot> {
         T create();
     }
 }

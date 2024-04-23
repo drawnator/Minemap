@@ -16,7 +16,7 @@ import com.seedfinding.mcterrain.TerrainGenerator;
 import com.seedfinding.minemap.MineMap;
 import com.seedfinding.minemap.feature.*;
 import com.seedfinding.minemap.feature.chests.Chests;
-import com.seedfinding.minemap.feature.chests.Loot;
+import com.seedfinding.minemap.feature.chests.AbstractLoot;
 import com.seedfinding.minemap.init.Features;
 import com.seedfinding.minemap.init.Logger;
 import com.seedfinding.minemap.listener.Events;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-public class LootSearchDialog extends Dialog {
+public class LootSearchDialog extends AbstractDialog {
 
     public JTextField numberOfLoot;
     public Dropdown<Class<? extends Feature<?, ?>>> featureDropdown;
@@ -180,7 +180,7 @@ public class LootSearchDialog extends Dialog {
         // FIXME make it possible to use any feature (particularly for strongholds)
         if (!(feature instanceof RegionStructure)) return;
         Item selectedItem = this.itemDropdown.getSelected();
-        Loot lootGen = Chests.get(selected).create();
+        AbstractLoot lootGen = Chests.get(selected).create();
 
         TerrainGenerator finalTerrainGenerator = chunkGenerator;
         long start = System.currentTimeMillis();
@@ -192,7 +192,7 @@ public class LootSearchDialog extends Dialog {
             .takeWhile(e -> System.currentTimeMillis() <= start + 20000) // only 20 seconds
             .filter(e -> {
                 List<List<ItemStack>> lists = lootGen.getLootAt(map.context.worldSeed, e.toChunkPos(), feature, false, finalTerrainGenerator, map.context.getVersion());
-                return Loot.getSumWithPredicate(lists, i -> i.getItem().getName().equals(selectedItem.getName())) > 0;
+                return AbstractLoot.getSumWithPredicate(lists, i -> i.getItem().getName().equals(selectedItem.getName())) > 0;
             })
             .limit(n)
             .collect(Collectors.toList());

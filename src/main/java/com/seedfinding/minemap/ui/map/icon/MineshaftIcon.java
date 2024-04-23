@@ -9,7 +9,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 
 import java.util.List;
 
-public class MineshaftIcon extends StaticIcon {
+public class MineshaftIcon extends AbstractStaticIcon {
 
     public MineshaftIcon(MapContext context) {
         super(context);

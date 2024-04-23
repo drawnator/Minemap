@@ -20,7 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class UserProfileConfig extends Config {
+public class UserProfileConfig extends AbtractConfig {
     public static int MAX_SIZE = 15;
     @Expose
     protected int THREAD_COUNT;
@@ -194,7 +194,7 @@ public class UserProfileConfig extends Config {
     }
 
     @Override
-    public Config readConfig() {
+    public AbtractConfig readConfig() {
         UserProfileConfig config = (UserProfileConfig) super.readConfig();
         config.RECENT_SEEDS = resizeQueue(config.RECENT_SEEDS, MAX_SIZE, e -> e);
         config.SAVED_SEEDS = resizeQueue(config.SAVED_SEEDS, MAX_SIZE, e -> updateSavedSeeds(this.MINEMAP_VERSION, e));

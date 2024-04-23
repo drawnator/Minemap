@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class Polyline extends Tool {
+public class Polyline extends AbstractTool {
     private final LinkedList<BPos> bPosList = new LinkedList<>();
     private BPos firstPoint = null;
     private int pointsTraced = 0;
@@ -127,7 +127,7 @@ public class Polyline extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
+    public AbstractTool duplicate() {
         return new Polyline(this.rng);
     }
 

@@ -10,7 +10,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 
 import java.util.List;
 
-public class SpawnIcon extends StaticIcon {
+public class SpawnIcon extends AbstractStaticIcon {
 
     private final BPos pos;
 

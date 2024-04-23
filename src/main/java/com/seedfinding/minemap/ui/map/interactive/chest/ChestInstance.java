@@ -5,7 +5,7 @@ import com.seedfinding.mccore.util.pos.CPos;
 import com.seedfinding.mcfeature.Feature;
 import com.seedfinding.mcfeature.loot.item.ItemStack;
 import com.seedfinding.minemap.feature.chests.Chests;
-import com.seedfinding.minemap.feature.chests.Loot;
+import com.seedfinding.minemap.feature.chests.AbstractLoot;
 import com.seedfinding.minemap.ui.map.MapContext;
 import com.seedfinding.minemap.ui.map.MapPanel;
 
@@ -91,7 +91,7 @@ public class ChestInstance {
     public void generate() {
         Pair<Feature<?, ?>, CPos> informations = this.getInformations();
         if (informations == null || informations.getFirst() == null || informations.getSecond() == null) return;
-        Loot.LootFactory<?> lootFactory = Chests.get(informations.getFirst().getClass());
+        AbstractLoot.LootFactory<?> lootFactory = Chests.get(informations.getFirst().getClass());
         if (lootFactory != null) {
             this.listItems = lootFactory.create().getLootAt(
                 informations.getSecond(),

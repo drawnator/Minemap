@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class StructureListDialog extends StructureDialog {
+public class StructureListDialog extends AbstractStructureDialog {
     public JTextField enterN;
 
     public StructureListDialog(Runnable onExit) {

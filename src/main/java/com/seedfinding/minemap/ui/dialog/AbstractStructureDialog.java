@@ -33,7 +33,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class StructureDialog extends Dialog {
+public abstract class AbstractStructureDialog extends AbstractDialog {
     protected Dropdown<StructureItem> structureItemDropdown;
     protected JButton continueButton;
     protected JTextField enterN;
@@ -43,7 +43,7 @@ public abstract class StructureDialog extends Dialog {
     protected MapManager manager;
     protected ChunkRand chunkRand;
 
-    public StructureDialog(String title, LayoutManager layout) {
+    public AbstractStructureDialog(String title, LayoutManager layout) {
         super(title, layout);
     }
 
