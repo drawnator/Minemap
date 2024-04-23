@@ -254,6 +254,10 @@ public class MineMap extends JFrame {
         }
         downloadPopup.setVisible(false);
         downloadPopup.dispose();
+        change_version(newVersion, shouldUseVersion);
+    }
+
+    private static void change_version(String newVersion, boolean shouldUseVersion) {
         if (newVersion != null) {
             Process ps;
             try {
