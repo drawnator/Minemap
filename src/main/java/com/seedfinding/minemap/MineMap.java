@@ -111,11 +111,8 @@ public class MineMap extends JFrame {
         int blockZ;
         int size;
         if (Arrays.asList(args).contains("--seed")) {
-            int idx = Arrays.asList(args).indexOf("--seed");
-            if (idx + 1 >= args.length) {
-                System.err.println("Error no seed provided");
-                return;
-            }
+            Integer idx = getSeedIdx(args);
+            if (idx == null) return;
             try {
                 seed = Long.parseLong(args[idx + 1]);
             } catch (NumberFormatException ignored) {
@@ -181,6 +178,15 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer getSeedIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--seed");
+        if (idx + 1 >= args.length) {
+            System.err.println("Error no seed provided");
+            return null;
+        }
+        return idx;
     }
 
     private static BufferedImage getScreenShot(Fragment fragment, int width, int height) {
