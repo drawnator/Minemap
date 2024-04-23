@@ -110,19 +110,9 @@ public class MineMap extends JFrame {
         int blockX;
         int blockZ;
         int size;
-        if (Arrays.asList(args).contains("--seed")) {
-            Integer idx = getSeedIdx(args);
-            if (idx == null) return;
-            try {
-                seed = Long.parseLong(args[idx + 1]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid seed provided, should be numeric only for now");
-                return;
-            }
-        } else {
-            System.err.println("No seed argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
+        Long seedOrNull = getSeed(args);
+        if (seedOrNull == null) return;
+        seed = seedOrNull;
         if (Arrays.asList(args).contains("--version")) {
             Integer idx = getVersionIdx(args);
             if (idx == null) return;
@@ -168,6 +158,22 @@ public class MineMap extends JFrame {
         System.out.println("Done!");
     }
 
+    private static Long getSeed(String[] args){
+        Long seed = null;
+        if (Arrays.asList(args).contains("--seed")) {
+            Integer idx = getSeedIdx(args);
+            if (idx == null) return seed;
+            try {
+                seed = Long.parseLong(args[idx + 1]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid seed provided, should be numeric only for now");
+                return null;
+            }
+        } else {
+            System.err.println("No seed argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return seed;
+    }
     private static boolean check_version(MCVersion version) {
         if (version == null) {
             System.err.println("Invalid version provided");
