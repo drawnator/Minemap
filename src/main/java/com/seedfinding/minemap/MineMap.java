@@ -150,11 +150,8 @@ public class MineMap extends JFrame {
             return;
         }
         if (Arrays.asList(args).contains("--size")) {
-            int idx = Arrays.asList(args).indexOf("--size");
-            if (idx + 1 > args.length) {
-                System.err.println("Error no size provided");
-                return;
-            }
+            Integer idx = getSizeIdx(args);
+            if (idx == null) return;
             try {
                 size = Integer.parseInt(args[idx + 1]);
             } catch (NumberFormatException ignored) {
@@ -172,6 +169,15 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer getSizeIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--size");
+        if (idx + 1 > args.length) {
+            System.err.println("Error no size provided");
+            return null;
+        }
+        return idx;
     }
 
     private static Integer getPosIdx(String[] args) {
