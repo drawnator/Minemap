@@ -127,10 +127,7 @@ public class MineMap extends JFrame {
             Integer idx = getVersionIdx(args);
             if (idx == null) return;
             version = MCVersion.fromString(args[idx + 1]);
-            if (version == null) {
-                System.err.println("Invalid version provided");
-                return;
-            }
+            if (check_version(version)) return;
         } else {
             System.err.println("No version argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
             return;
@@ -169,6 +166,14 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static boolean check_version(MCVersion version) {
+        if (version == null) {
+            System.err.println("Invalid version provided");
+            return true;
+        }
+        return false;
     }
 
     private static Integer getSizeIdx(String[] args) {
