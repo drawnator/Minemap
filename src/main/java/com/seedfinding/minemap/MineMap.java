@@ -136,11 +136,8 @@ public class MineMap extends JFrame {
             return;
         }
         if (Arrays.asList(args).contains("--pos")) {
-            int idx = Arrays.asList(args).indexOf("--pos");
-            if (idx + 2 > args.length) {
-                System.err.println("Error no pos provided");
-                return;
-            }
+            Integer idx = getPosIdx(args);
+            if (idx == null) return;
             try {
                 blockX = Integer.parseInt(args[idx + 1]);
                 blockZ = Integer.parseInt(args[idx + 2]);
@@ -175,6 +172,15 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer getPosIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--pos");
+        if (idx + 2 > args.length) {
+            System.err.println("Error no pos provided");
+            return null;
+        }
+        return idx;
     }
 
     private static Integer getVersionIdx(String[] args) {
