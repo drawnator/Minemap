@@ -376,29 +376,7 @@ public class MineMap extends JFrame {
         Object[] pinned = Configs.USER_PROFILE.getPinnedSeeds().toArray();
         int len = Math.min(MAX_SIZE, pinned.length);
         List<Pair<Pair<MCVersion, String>, com.seedfinding.mccore.state.Dimension>> list = new ArrayList<>();
-        for (int i = 1; i <= len; i++) {
-            String config = (String) pinned[len - i];
-            String[] split = config.split("::");
-            if (split.length == 3) {
-                String seed = split[0];
-                String version = split[1];
-                MCVersion mcVersion = MCVersion.fromString(version);
-                int integer = Integer.MAX_VALUE;
-                try {
-                    integer = Integer.parseInt(split[2]);
-                } catch (NumberFormatException e) {
-                    Logger.LOGGER.severe(e.getMessage());
-                }
-                com.seedfinding.mccore.state.Dimension dimension = com.seedfinding.mccore.state.Dimension.fromId(integer);
-                if (mcVersion != null && dimension != null) {
-                    list.add(new Pair<>(new Pair<>(mcVersion, seed), dimension));
-                } else {
-                    Logger.LOGGER.severe("Saved seed is not possible to use " + dimension + " " + mcVersion + " " + seed);
-                }
-            } else {
-                Logger.LOGGER.severe("Saved seed is not in the proper format");
-            }
-        }
+        check_seed(len, pinned, list);
         Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds = list.stream()
             .collect(Collectors.groupingBy(Pair::getFirst, Collectors.mapping(Pair::getSecond, Collectors.toList())));
         for (Map.Entry<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeed : pinnedSeeds.entrySet()) {
@@ -421,6 +399,32 @@ public class MineMap extends JFrame {
                     }
 
                 ));
+            }
+        }
+    }
+
+    private static void check_seed(int len, Object[] pinned, List<Pair<Pair<MCVersion, String>, com.seedfinding.mccore.state.Dimension>> list) {
+        for (int i = 1; i <= len; i++) {
+            String config = (String) pinned[len - i];
+            String[] split = config.split("::");
+            if (split.length == 3) {
+                String seed = split[0];
+                String version = split[1];
+                MCVersion mcVersion = MCVersion.fromString(version);
+                int integer = Integer.MAX_VALUE;
+                try {
+                    integer = Integer.parseInt(split[2]);
+                } catch (NumberFormatException e) {
+                    Logger.LOGGER.severe(e.getMessage());
+                }
+                com.seedfinding.mccore.state.Dimension dimension = com.seedfinding.mccore.state.Dimension.fromId(integer);
+                if (mcVersion != null && dimension != null) {
+                    list.add(new Pair<>(new Pair<>(mcVersion, seed), dimension));
+                } else {
+                    Logger.LOGGER.severe("Saved seed is not possible to use " + dimension + " " + mcVersion + " " + seed);
+                }
+            } else {
+                Logger.LOGGER.severe("Saved seed is not in the proper format");
             }
         }
     }
