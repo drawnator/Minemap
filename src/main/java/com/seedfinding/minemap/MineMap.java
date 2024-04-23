@@ -379,6 +379,10 @@ public class MineMap extends JFrame {
         check_seed(len, pinned, list);
         Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds = list.stream()
             .collect(Collectors.groupingBy(Pair::getFirst, Collectors.mapping(Pair::getSecond, Collectors.toList())));
+        configTabGroup(pinnedSeeds, cores);
+    }
+
+    private static void configTabGroup(Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds, int cores) {
         for (Map.Entry<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeed : pinnedSeeds.entrySet()) {
             pinnedSeed.getValue().sort(com.seedfinding.mccore.state.Dimension::compareTo);
             TabGroup tabGroup = MineMap.INSTANCE.worldTabs.load(
