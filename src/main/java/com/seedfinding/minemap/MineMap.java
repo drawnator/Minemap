@@ -113,15 +113,9 @@ public class MineMap extends JFrame {
         Long seedOrNull = getSeed(args);
         if (seedOrNull == null) return;
         seed = seedOrNull;
-        if (Arrays.asList(args).contains("--version")) {
-            Integer idx = getVersionIdx(args);
-            if (idx == null) return;
-            version = MCVersion.fromString(args[idx + 1]);
-            if (check_version(version)) return;
-        } else {
-            System.err.println("No version argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
+        MCVersion versionOrNull = getVersion(args);
+        if (versionOrNull == null) return;
+        version = versionOrNull;
         if (Arrays.asList(args).contains("--pos")) {
             Integer idx = getPosIdx(args);
             if (idx == null) return;
@@ -156,6 +150,19 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static MCVersion getVersion(String[] args){
+        MCVersion version = null;
+        if (Arrays.asList(args).contains("--version")) {
+            Integer idx = getVersionIdx(args);
+            if (idx == null) return version;
+            version = MCVersion.fromString(args[idx + 1]);
+            if (check_version(version)) return null;
+        } else {
+            System.err.println("No version argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return version;
     }
 
     private static Long getSeed(String[] args){
