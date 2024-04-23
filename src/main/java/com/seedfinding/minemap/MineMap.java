@@ -238,17 +238,7 @@ public class MineMap extends JFrame {
             shouldUseVersion = true;
         }
         // TODO add more build options here
-        if (shouldAsk) {
-            int dialogResult = JOptionPane.showConfirmDialog(
-                null,
-                String.format("Would you like to update to the version %s of Minemap?", release.getSecond()),
-                "Update available for Minemap " + MineMap.version,
-                JOptionPane.YES_NO_OPTION
-            );
-            if (dialogResult != 0) {
-                return;
-            }
-        }
+        if (update_dialogue_box(shouldAsk, release)) return;
         JDialog downloadPopup = new ModalPopup(null, "Downloading new MineMap version");
         downloadPopup.setSize(new Dimension(300, 50));
         downloadPopup.setShape(new RoundRectangle2D.Double(0, 0, 300, 50, 50, 50));
@@ -286,6 +276,21 @@ public class MineMap extends JFrame {
                 System.exit(0);
             }
         }
+    }
+
+    private static boolean update_dialogue_box(boolean shouldAsk, Pair<Pair<String, String>, String> release) {
+        if (shouldAsk) {
+            int dialogResult = JOptionPane.showConfirmDialog(
+                null,
+                String.format("Would you like to update to the version %s of Minemap?", release.getSecond()),
+                "Update available for Minemap " + MineMap.version,
+                JOptionPane.YES_NO_OPTION
+            );
+            if (dialogResult != 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static SwingWorker<String, Void> getDownloadWorker(JDialog parent, Pair<String, String> newVersion) {
