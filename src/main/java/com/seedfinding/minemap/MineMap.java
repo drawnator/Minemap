@@ -124,11 +124,8 @@ public class MineMap extends JFrame {
             return;
         }
         if (Arrays.asList(args).contains("--version")) {
-            int idx = Arrays.asList(args).indexOf("--version");
-            if (idx + 1 >= args.length) {
-                System.err.println("Error no version provided");
-                return;
-            }
+            Integer idx = getVersionIdx(args);
+            if (idx == null) return;
             version = MCVersion.fromString(args[idx + 1]);
             if (version == null) {
                 System.err.println("Invalid version provided");
@@ -178,6 +175,15 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer getVersionIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--version");
+        if (idx + 1 >= args.length) {
+            System.err.println("Error no version provided");
+            return null;
+        }
+        return idx;
     }
 
     private static Integer getSeedIdx(String[] args) {
