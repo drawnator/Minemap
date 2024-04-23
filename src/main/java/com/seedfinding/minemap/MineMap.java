@@ -391,19 +391,23 @@ public class MineMap extends JFrame {
                 Configs.USER_PROFILE.getThreadCount(cores),
                 pinnedSeed.getValue()
             );
-            if (tabGroup != null) {
-                tabGroup.getMapPanels().forEach(e -> e.getHeader().setSaved(true, false));
-                tabGroup.getMapPanels().forEach(e -> Arrays.stream(e.manager.popup.getComponents()).forEach(c -> {
-                        if (c instanceof JMenuItem) {
-                            JMenuItem item = ((JMenuItem) c);
-                            if (item.getText().equals("Save tab")) {
-                                item.setText("Unsave tab");
-                            }
+            setTabGroupPanels(tabGroup);
+        }
+    }
+
+    private static void setTabGroupPanels(TabGroup tabGroup) {
+        if (tabGroup != null) {
+            tabGroup.getMapPanels().forEach(e -> e.getHeader().setSaved(true, false));
+            tabGroup.getMapPanels().forEach(e -> Arrays.stream(e.manager.popup.getComponents()).forEach(c -> {
+                    if (c instanceof JMenuItem) {
+                        JMenuItem item = ((JMenuItem) c);
+                        if (item.getText().equals("Save tab")) {
+                            item.setText("Unsave tab");
                         }
                     }
+                }
 
-                ));
-            }
+            ));
         }
     }
 
