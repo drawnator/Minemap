@@ -116,20 +116,9 @@ public class MineMap extends JFrame {
         MCVersion versionOrNull = getVersion(args);
         if (versionOrNull == null) return;
         version = versionOrNull;
-        if (Arrays.asList(args).contains("--pos")) {
-            Integer idx = getPosIdx(args);
-            if (idx == null) return;
-            try {
-                blockX = Integer.parseInt(args[idx + 1]);
-                blockZ = Integer.parseInt(args[idx + 2]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid pos provided, should be numeric");
-                return;
-            }
-        } else {
-            System.out.println("No pos argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
+        Integer[] coordinates = getCoordinates(args);
+        if (coordinates.equals(new Integer[2])) return;
+        blockX = coordinates[0];blockZ = coordinates[1];
         Integer sizeOrNull = getSize(args);
         if (sizeOrNull == null) return;
         size = sizeOrNull;
@@ -140,6 +129,24 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer[] getCoordinates(String[] args){
+        Integer[] coordinates = new Integer[2];
+        if (Arrays.asList(args).contains("--pos")) {
+            Integer idx = getPosIdx(args);
+            if (idx == null) return coordinates;
+            try {
+                coordinates[0] = Integer.parseInt(args[idx + 1]);
+                coordinates[1] = Integer.parseInt(args[idx + 2]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid pos provided, should be numeric");
+                return new Integer[2];
+            }
+        } else {
+            System.out.println("No pos argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return coordinates;
     }
 
     private static Integer getSize(String[] args){
