@@ -126,7 +126,7 @@ public class Visualizer {
         cam = new Camera();
         cam.addMouseCallback(window);
 
-        lightPos = new Vector3f(blockManager.WIDTH / 2f, 20.5f, blockManager.LENGTH / 2f);
+        lightPos = get_light_position();
         light = new Block(BlockType.LIGHT);
         light.getModel().translate(lightPos);
 
@@ -136,6 +136,10 @@ public class Visualizer {
         glDisable(GL_CULL_FACE);
         glClearColor(0.1607843137254902f, 0.6235294117647059f, 1.0f, 1.0f);
 
+    }
+
+    private Vector3f get_light_position(){
+        return new Vector3f(blockManager.WIDTH / 2f, 20.5f, blockManager.LENGTH / 2f);
     }
 
     private void destroy() {
