@@ -9,11 +9,11 @@ import com.seedfinding.minemap.util.data.DrawInfo;
 
 import java.awt.*;
 
-public abstract class DynamicIcon extends IconRenderer {
+public abstract class AbstractDynamicIcon extends AbstractIconRenderer {
 
     private final int blockSize;
 
-    public DynamicIcon(MapContext context, int blockSize) {
+    public AbstractDynamicIcon(MapContext context, int blockSize) {
         super(context);
         this.blockSize = blockSize;
     }

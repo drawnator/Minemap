@@ -1,5 +1,7 @@
 package com.seedfinding.minemap.ui.map.icon;
 
+import com.seedfinding.mcbiome.layer.BiomeLayer;
+import com.seedfinding.mcbiome.source.LayeredBiomeSource;
 import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.state.Dimension;
 import com.seedfinding.mccore.util.pos.BPos;
@@ -14,7 +16,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 import java.util.List;
 import java.util.function.Function;
 
-public class RegionIcon extends StaticIcon {
+public class RegionIcon extends AbstractStaticIcon {
 
     public RegionIcon(MapContext context) {
         super(context);
@@ -44,17 +46,20 @@ public class RegionIcon extends StaticIcon {
             for (int z = fragZMin - increment; z < fragZMax + increment; z += increment) {
                 RegionStructure.Data<?> data = structure.at(x >> 4, z >> 4);
                 CPos pos = structure.getInRegion(worldSeedWithSalt, data.regionX, data.regionZ, rand);
-                if (pos != null) {
-                    BPos currentPos = blockPosTranslation().apply(pos.toBlockPos().add(9, 0, 9));
-                    if (Configs.USER_PROFILE.getUserSettings().structureMode) {
+                if (pos == null) return;
+                BPos currentPos = blockPosTranslation().apply(pos.toBlockPos().add(9, 0, 9));
+                if (Configs.USER_PROFILE.getUserSettings().structureMode) {
+                    positions.add(currentPos);
+                    return;
+                }
+                LayeredBiomeSource<? extends BiomeLayer> biome = this.getContext().getBiomeSource(getDimension());
+                boolean is_spawnable_structure = structure.canSpawn(pos.getX(), pos.getZ(), biome);
+                if (is_spawnable_structure) {
+                    TerrainGenerator generator = this.getContext().getTerrainGenerator(structure).getFirst();
+                    if (generator == null) {
                         positions.add(currentPos);
-                    } else if (structure.canSpawn(pos.getX(), pos.getZ(), this.getContext().getBiomeSource(getDimension()))) {
-                        TerrainGenerator generator = this.getContext().getTerrainGenerator(structure).getFirst();
-                        if (generator == null) {
-                            positions.add(currentPos);
-                        } else if (structure.canGenerate(pos.getX(), pos.getZ(), generator)) {
-                            positions.add(currentPos);
-                        }
+                    } else if (structure.canGenerate(pos.getX(), pos.getZ(), generator)) {
+                        positions.add(currentPos);
                     }
                 }
 

@@ -4,20 +4,24 @@ import com.seedfinding.mccore.util.pos.BPos;
 import com.seedfinding.minemap.util.math.DisplayMaths;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 
-public class Area extends Tool {
+public class Area extends AbstractTool {
     private BPos pos1 = null;
     private BPos pos2 = null;
     private BPos pos3 = null;
     private BPos pos4 = null;
     private int pointsTraced = 0;
     private Color color;
+    private Random rng;
 
-    public Area() {
-        color = DisplayMaths.getRandomColor();
+    public Area(Random rng) {
+        this.rng = rng;
+        color = DisplayMaths.getRandomColor(rng);
     }
 
     @Override
@@ -61,7 +65,7 @@ public class Area extends Tool {
 
     @Override
     public List<Shape> getPartialShapes() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -82,7 +86,7 @@ public class Area extends Tool {
 
     @Override
     public List<Shape> getExactShapes() {
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -153,8 +157,8 @@ public class Area extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
-        return new Area();
+    public AbstractTool duplicate() {
+        return new Area(this.rng);
     }
 
     @Override

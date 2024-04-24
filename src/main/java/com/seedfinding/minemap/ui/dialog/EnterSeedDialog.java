@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class EnterSeedDialog extends Dialog {
+public class EnterSeedDialog extends AbstractDialog {
 
     public HintTextField seedField;
     public FileButton fileButton;

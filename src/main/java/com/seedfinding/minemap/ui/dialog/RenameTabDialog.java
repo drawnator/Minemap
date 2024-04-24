@@ -9,7 +9,7 @@ import java.awt.*;
 
 import static com.seedfinding.minemap.util.ui.interactive.Prompt.setPrompt;
 
-public class RenameTabDialog extends Dialog {
+public class RenameTabDialog extends AbstractDialog {
 
     public JTextField nameField;
     public JButton continueButton;

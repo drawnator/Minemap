@@ -8,7 +8,7 @@ import com.seedfinding.minemap.util.data.DrawInfo;
 import java.awt.*;
 import java.util.List;
 
-public class NullIcon extends IconRenderer {
+public class NullIcon extends AbstractIconRenderer {
 
     public static final NullIcon INSTANCE = new NullIcon();
 

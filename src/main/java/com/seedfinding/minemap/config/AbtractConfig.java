@@ -6,14 +6,14 @@ import com.google.gson.GsonBuilder;
 import com.seedfinding.minemap.MineMap;
 import com.seedfinding.minemap.init.Logger;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 
-public abstract class Config {
+public abstract class AbtractConfig {
 
     public static class LocaleAgnosticFieldNamingStrategy implements FieldNamingStrategy {
         @Override
@@ -65,9 +65,9 @@ public abstract class Config {
 
     public abstract String getName();
 
-    public Config readConfig() {
+    public AbtractConfig readConfig() {
         try {
-            Config config = GSON.fromJson(new FileReader(this.getConfigFile()), this.getClass());
+                AbtractConfig config = GSON.fromJson(Files.newBufferedReader(Paths.get(this.getConfigFile().getPath())), this.getClass());
             if (config == null) throw new Exception("WTF");
             return config;
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public abstract class Config {
         return this;
     }
 
-    public Config forceGenerateConfig() {
+    public AbtractConfig forceGenerateConfig() {
         this.generateConfig();
         return this;
     }
@@ -102,7 +102,7 @@ public abstract class Config {
         File dir = new File(this.root);
         if (!dir.exists() && !dir.mkdirs()) return;
         if (!this.getConfigFile().exists() && !this.getConfigFile().createNewFile()) return;
-        FileWriter writer = new FileWriter(this.getConfigFile());
+        BufferedWriter writer = Files.newBufferedWriter(Paths.get(this.getConfigFile().getPath()),StandardCharsets.UTF_8);
         GSON.toJson(this, writer);
         writer.flush();
         writer.close();

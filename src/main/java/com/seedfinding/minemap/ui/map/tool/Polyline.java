@@ -10,19 +10,23 @@ import com.seedfinding.minemap.util.tsp.Program;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 
-public class Polyline extends Tool {
+public class Polyline extends AbstractTool {
     private final LinkedList<BPos> bPosList = new LinkedList<>();
     private BPos firstPoint = null;
     private int pointsTraced = 0;
     private Color color;
     private final Program program = new Program();
+    private Random rng;
 
-    public Polyline() {
-        color = DisplayMaths.getRandomColor();
+    public Polyline(Random rng) {
+        this.rng = rng;
+        color = DisplayMaths.getRandomColor(rng);
     }
 
     @Override
@@ -51,7 +55,7 @@ public class Polyline extends Tool {
         if (bPosList.size() > 1) {
             return DisplayMaths.getPolylinePolygon(bPosList, offset);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -65,7 +69,7 @@ public class Polyline extends Tool {
         if (bPosList.size() > 1) {
             return DisplayMaths.getPolylinePolygon(bPosList, offset);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -123,8 +127,8 @@ public class Polyline extends Tool {
     }
 
     @Override
-    public Tool duplicate() {
-        return new Polyline();
+    public AbstractTool duplicate() {
+        return new Polyline(this.rng);
     }
 
     @Override

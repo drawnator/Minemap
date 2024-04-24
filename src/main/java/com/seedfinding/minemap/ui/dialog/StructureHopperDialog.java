@@ -6,11 +6,8 @@ import com.seedfinding.minemap.init.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class StructureHopperDialog extends StructureDialog {
+public class StructureHopperDialog extends AbstractStructureDialog {
     public StructureHopperDialog(Runnable onExit) {
         super("Go to Structure Coordinates", new GridLayout(0, 1));
         this.addExitProcedure(onExit);

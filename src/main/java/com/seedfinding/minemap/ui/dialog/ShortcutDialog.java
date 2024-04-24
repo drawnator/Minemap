@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ShortcutDialog extends Dialog {
+public class ShortcutDialog extends AbstractDialog {
 
     public ArrayList<KeyShortcuts.ShortcutAction> shortcutActions;
     public ArrayList<Pair<Dropdown<?>[], JTextField>> keyShortcuts;

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-public class IconSizeDialog extends Dialog {
+public class IconSizeDialog extends AbstractDialog {
     private JSlider[] sliders;
     private JButton continueButton;
 

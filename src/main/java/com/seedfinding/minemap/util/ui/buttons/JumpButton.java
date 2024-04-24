@@ -2,7 +2,7 @@ package com.seedfinding.minemap.util.ui.buttons;
 
 import java.awt.*;
 
-public class JumpButton extends ButtonIcon {
+public class JumpButton extends AbstractButtonIcon {
     public JumpButton(int size, int inset, float factor, boolean background, Color backgroundColor) {
         super(size, inset, factor, background, backgroundColor);
     }

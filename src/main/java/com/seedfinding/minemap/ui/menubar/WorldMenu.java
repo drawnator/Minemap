@@ -13,14 +13,14 @@ import com.seedfinding.minemap.ui.dialog.CoordHopperDialog;
 import com.seedfinding.minemap.ui.dialog.SaltDialog;
 import com.seedfinding.minemap.ui.dialog.StructureHopperDialog;
 import com.seedfinding.minemap.ui.map.MapPanel;
-import com.seedfinding.minemap.ui.map.icon.IconRenderer;
+import com.seedfinding.minemap.ui.map.icon.AbstractIconRenderer;
 import com.seedfinding.minemap.ui.map.icon.SpawnIcon;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 
-public class WorldMenu extends Menu {
+public class WorldMenu extends AbstractMenu {
     private final JMenuItem goToCoords;
     private final JMenuItem goToSpawn;
     private final JMenuItem loadShadowSeed;
@@ -66,7 +66,7 @@ public class WorldMenu extends Menu {
         this.menu.add(changeSalts);
     }
 
-    public Runnable goToCoords() {
+    public final Runnable goToCoords() {
         return () -> {
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
             this.goToCoords.setEnabled(map != null);
@@ -77,7 +77,7 @@ public class WorldMenu extends Menu {
         };
     }
 
-    public Runnable goToSpawn() {
+    public final Runnable goToSpawn() {
         return () -> {
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
             this.goToSpawn.setEnabled(map != null && this.getActiveSpawn() != null);
@@ -89,7 +89,7 @@ public class WorldMenu extends Menu {
         };
     }
 
-    public Runnable loadShadowSeed() {
+    public final Runnable loadShadowSeed() {
         return () -> {
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
             this.loadShadowSeed.setEnabled(map != null && map.getContext().dimension == Dimension.OVERWORLD);
@@ -101,7 +101,7 @@ public class WorldMenu extends Menu {
         };
     }
 
-    public Runnable goToStructure() {
+    public final Runnable goToStructure() {
         return () -> {
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
             this.goToStructure.setEnabled(map != null);
@@ -112,7 +112,7 @@ public class WorldMenu extends Menu {
         };
     }
 
-    public Runnable changeSalts() {
+    public final Runnable changeSalts() {
         return () -> {
             SaltDialog dialog;
             try {
@@ -129,7 +129,7 @@ public class WorldMenu extends Menu {
 
     private BPos getActiveSpawn() {
         MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
-        IconRenderer icon = map.getContext().getIconManager().getFor(SpawnPoint.class);
+        AbstractIconRenderer icon = map.getContext().getIconManager().getFor(SpawnPoint.class);
         return icon instanceof SpawnIcon ? ((SpawnIcon) icon).getPos() : null;
     }
 

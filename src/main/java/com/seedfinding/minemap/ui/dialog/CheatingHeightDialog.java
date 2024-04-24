@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Hashtable;
 
-public class CheatingHeightDialog extends Dialog {
+public class CheatingHeightDialog extends AbstractDialog {
     private JSlider[] sliders;
     private JButton continueButton;
 

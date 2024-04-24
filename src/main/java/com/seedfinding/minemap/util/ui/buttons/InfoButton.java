@@ -2,7 +2,7 @@ package com.seedfinding.minemap.util.ui.buttons;
 
 import java.awt.*;
 
-public class InfoButton extends ButtonIcon {
+public class InfoButton extends AbstractButtonIcon {
     public InfoButton(int size, int inset, float factor, boolean background, Color backgroundColor) {
         super(size, inset, factor, background, backgroundColor);
     }

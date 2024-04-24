@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class BiomeColorsConfig extends Config {
+public class BiomeColorsConfig extends AbtractConfig {
 
     public static final String DEFAULT_STYLE_NAME = "Default";
     public final static HashMap<Biome, String> BIOME_COLORS = new LinkedHashMap<>();
@@ -132,9 +132,10 @@ public class BiomeColorsConfig extends Config {
 
         DEFAULT_BIOME_COLORS.forEach((biomeEntry, colorEntry) -> {
             for (Biome b : Biomes.REGISTRY.values()) {
-                if (!b.getName().equalsIgnoreCase(biomeEntry.trim())) continue;
-                this.defaultBiomeColorCache.put(b.getId(), Color.decode(colorEntry));
-                break;
+                if (b.getName().equalsIgnoreCase(biomeEntry.trim())) {
+                    this.defaultBiomeColorCache.put(b.getId(), Color.decode(colorEntry));
+                    break;
+                }
             }
         });
 
@@ -144,9 +145,10 @@ public class BiomeColorsConfig extends Config {
 
             mapEntry.forEach((biomeEntry, colorEntry) -> {
                 for (Biome b : Biomes.REGISTRY.values()) {
-                    if (!b.getName().equalsIgnoreCase(biomeEntry.trim())) continue;
-                    map.put(b.getId(), Color.decode(colorEntry));
-                    break;
+                    if (b.getName().equalsIgnoreCase(biomeEntry.trim())) {
+                        map.put(b.getId(), Color.decode(colorEntry));
+                        break;
+                    }
                 }
             });
         });

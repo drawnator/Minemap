@@ -17,17 +17,17 @@ import java.util.function.Function;
 
 import static com.seedfinding.minemap.util.ui.graphics.Icon.paintImage;
 
-public abstract class StaticIcon extends IconRenderer {
+public abstract class AbstractStaticIcon extends AbstractIconRenderer {
 
     private static final int DEFAULT_VALUE = 24;
     private final int iconSizeX;
     private final int iconSizeZ;
 
-    public StaticIcon(MapContext context) {
+    public AbstractStaticIcon(MapContext context) {
         this(context, DEFAULT_VALUE, DEFAULT_VALUE);
     }
 
-    public StaticIcon(MapContext context, int iconSizeX, int iconSizeZ) {
+    public AbstractStaticIcon(MapContext context, int iconSizeX, int iconSizeZ) {
         super(context);
         this.iconSizeX = iconSizeX;
         this.iconSizeZ = iconSizeZ;

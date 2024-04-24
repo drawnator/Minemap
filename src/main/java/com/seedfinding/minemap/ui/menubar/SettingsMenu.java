@@ -14,7 +14,7 @@ import java.awt.event.KeyEvent;
 
 import static com.seedfinding.minemap.config.KeyboardsConfig.getKeyComboString;
 
-public class SettingsMenu extends Menu {
+public class SettingsMenu extends AbstractMenu {
     private final JMenu metric;
     private final JMenu modifierKey;
     private final JMenuItem shortcuts;
@@ -73,10 +73,10 @@ public class SettingsMenu extends Menu {
         this.disableStrongholds.addChangeListener(e -> {
             Configs.USER_PROFILE.getUserSettings().disableStronghold = this.disableStrongholds.getState();
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
-            if (!this.disableStrongholds.getState() && map != null) {
-                if (map.getContext() != null && map.getContext().getStarts() == null) {
-                    map.getContext().calculateStarts(map);
-                }
+            boolean enabled_stronghold = !this.disableStrongholds.getState();
+            boolean no_map = map != null;
+            if ((enabled_stronghold && no_map) && (map.getContext() != null && map.getContext().getStarts() == null)) {
+                map.getContext().calculateStarts(map);
             }
             Configs.USER_PROFILE.flush();
         });
@@ -190,7 +190,7 @@ public class SettingsMenu extends Menu {
         }));
     }
 
-    public Runnable changeShortcuts() {
+    public final Runnable changeShortcuts() {
         return () -> {
             this.activate.run();
             JDialog dialog = new ShortcutDialog(this.deactivate);

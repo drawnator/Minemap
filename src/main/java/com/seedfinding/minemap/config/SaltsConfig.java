@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SaltsConfig extends Config {
+public class SaltsConfig extends AbtractConfig {
     // can't use the enum as the key as it is not correctly deserialized by GSON
     @Expose
     protected Map<String, Map<String, Integer>> SALTS = new LinkedHashMap<>();
@@ -59,7 +59,7 @@ public class SaltsConfig extends Config {
             }
             return result;
         }
-        return null;
+        return new LinkedHashMap<>();
     }
 
     public Map<String, Integer> getOverrides(MCVersion version) {
@@ -118,25 +118,41 @@ public class SaltsConfig extends Config {
     }
 
     private void resetConfig(MCVersion version) {
-        this.addDefaultEntry(version, Structure.getName(BastionRemnant.class), BastionRemnant.CONFIGS.getAsOf(version) == null ? null : BastionRemnant.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, OWBastionRemnant.name(), BastionRemnant.CONFIGS.getAsOf(version) == null ? null : BastionRemnant.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(BuriedTreasure.class), BuriedTreasure.CONFIGS.getAsOf(version) == null ? null : BuriedTreasure.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(DesertPyramid.class), DesertPyramid.CONFIGS.getAsOf(version) == null ? null : DesertPyramid.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(EndCity.class), EndCity.CONFIGS.getAsOf(version) == null ? null : EndCity.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(Fortress.class), Fortress.CONFIGS.getAsOf(version) == null ? null : Fortress.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, OWFortress.name(), Fortress.CONFIGS.getAsOf(version) == null ? null : Fortress.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(Igloo.class), Igloo.CONFIGS.getAsOf(version) == null ? null : Igloo.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(JunglePyramid.class), JunglePyramid.CONFIGS.getAsOf(version) == null ? null : JunglePyramid.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(Mansion.class), Mansion.CONFIGS.getAsOf(version) == null ? null : Mansion.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(Monument.class), Monument.CONFIGS.getAsOf(version) == null ? null : Monument.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(NetherFossil.class), NetherFossil.CONFIGS.getAsOf(version) == null ? null : NetherFossil.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(OceanRuin.class), OceanRuin.CONFIGS.getAsOf(version) == null ? null : OceanRuin.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(PillagerOutpost.class), PillagerOutpost.CONFIGS.getAsOf(version) == null ? null : PillagerOutpost.CONFIGS.getAsOf(version).salt);
+        reset_abandoned_building_config(version);
+        reset_occupied_building_config(version);
+        reset_nether_building_config(version);
+        reset_ocean_config(version);
         this.addDefaultEntry(version, OWRuinedPortal.name(), RuinedPortal.OVERWORLD_CONFIGS.getAsOf(version) == null ? null : RuinedPortal.OVERWORLD_CONFIGS.getAsOf(version).salt);
         this.addDefaultEntry(version, NERuinedPortal.name(), RuinedPortal.NETHER_CONFIGS.getAsOf(version) == null ? null : RuinedPortal.NETHER_CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(Shipwreck.class), Shipwreck.CONFIGS.getAsOf(version) == null ? null : Shipwreck.CONFIGS.getAsOf(version).salt);
-        this.addDefaultEntry(version, Structure.getName(SwampHut.class), SwampHut.CONFIGS.getAsOf(version) == null ? null : SwampHut.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(EndCity.class), EndCity.CONFIGS.getAsOf(version) == null ? null : EndCity.CONFIGS.getAsOf(version).salt);
+    }
+
+    private void reset_nether_building_config(MCVersion version) {
+        this.addDefaultEntry(version, Structure.getName(BastionRemnant.class), BastionRemnant.CONFIGS.getAsOf(version) == null ? null : BastionRemnant.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, OWBastionRemnant.name(), BastionRemnant.CONFIGS.getAsOf(version) == null ? null : BastionRemnant.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(NetherFossil.class), NetherFossil.CONFIGS.getAsOf(version) == null ? null : NetherFossil.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(Fortress.class), Fortress.CONFIGS.getAsOf(version) == null ? null : Fortress.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, OWFortress.name(), Fortress.CONFIGS.getAsOf(version) == null ? null : Fortress.CONFIGS.getAsOf(version).salt);
+    }
+
+    private void reset_occupied_building_config(MCVersion version) {
         this.addDefaultEntry(version, Structure.getName(Village.class), Village.CONFIGS.getAsOf(version) == null ? null : Village.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(PillagerOutpost.class), PillagerOutpost.CONFIGS.getAsOf(version) == null ? null : PillagerOutpost.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(Mansion.class), Mansion.CONFIGS.getAsOf(version) == null ? null : Mansion.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(SwampHut.class), SwampHut.CONFIGS.getAsOf(version) == null ? null : SwampHut.CONFIGS.getAsOf(version).salt);
+    }
+
+    private void reset_abandoned_building_config(MCVersion version) {
+        this.addDefaultEntry(version, Structure.getName(DesertPyramid.class), DesertPyramid.CONFIGS.getAsOf(version) == null ? null : DesertPyramid.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(JunglePyramid.class), JunglePyramid.CONFIGS.getAsOf(version) == null ? null : JunglePyramid.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(Igloo.class), Igloo.CONFIGS.getAsOf(version) == null ? null : Igloo.CONFIGS.getAsOf(version).salt);
+    }
+
+    private void reset_ocean_config(MCVersion version) {
+        this.addDefaultEntry(version, Structure.getName(Monument.class), Monument.CONFIGS.getAsOf(version) == null ? null : Monument.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(OceanRuin.class), OceanRuin.CONFIGS.getAsOf(version) == null ? null : OceanRuin.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(Shipwreck.class), Shipwreck.CONFIGS.getAsOf(version) == null ? null : Shipwreck.CONFIGS.getAsOf(version).salt);
+        this.addDefaultEntry(version, Structure.getName(BuriedTreasure.class), BuriedTreasure.CONFIGS.getAsOf(version) == null ? null : BuriedTreasure.CONFIGS.getAsOf(version).salt);
     }
 
     public void resetOverrides(MCVersion version) {

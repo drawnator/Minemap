@@ -26,13 +26,14 @@ import one.util.streamex.StreamEx;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class StructureDialog extends Dialog {
+public abstract class AbstractStructureDialog extends AbstractDialog {
     protected Dropdown<StructureItem> structureItemDropdown;
     protected JButton continueButton;
     protected JTextField enterN;
@@ -42,7 +43,7 @@ public abstract class StructureDialog extends Dialog {
     protected MapManager manager;
     protected ChunkRand chunkRand;
 
-    public StructureDialog(String title, LayoutManager layout) {
+    public AbstractStructureDialog(String title, LayoutManager layout) {
         super(title, layout);
     }
 
@@ -85,7 +86,7 @@ public abstract class StructureDialog extends Dialog {
     public List<BPos> getFeatures(int limit) {
         Structure<?, ?> feature = this.structureItemDropdown.getSelected().getFeature();
         Function<BPos, Boolean> filter = this.structureItemDropdown.getSelected().getFilter();
-        if (!(feature instanceof RegionStructure || feature instanceof Stronghold)) return null;
+        if (!(feature instanceof RegionStructure || feature instanceof Stronghold)) return new ArrayList<>();
 
         BPos centerPos = this.manager.getCenterPos();
         BiomeSource biomeSource = this.context.getBiomeSource();
@@ -111,7 +112,7 @@ public abstract class StructureDialog extends Dialog {
         }
 
         Stream<BPos> stream = StructureHelper.getClosest(feature, centerPos, worldSeedWithSalt, chunkRand, biomeSource, terrainGenerator, dimCoeff);
-        if (stream == null) return null;
+        if (stream == null) return new ArrayList<>();
         int threads=Math.min(Configs.USER_PROFILE.getThreadCount(),limit);
         return StreamEx.of(stream).parallel(new ForkJoinPool(threads)).filter(e -> filter != null ? filter.apply(e) : true).limit(limit).collect(Collectors.toList());
     }

@@ -89,7 +89,9 @@ public class DisplayMaths {
         double area = 0.0;
         for (int i = 0; i < bPosList.size(); i++) {
             int j = (i + 1) % bPosList.size();
-            area += bPosList.get(i).getX() * bPosList.get(j).getZ() - bPosList.get(i).getZ() * bPosList.get(j).getX();
+            BPos this_point = bPosList.get(i);
+            BPos next_point = bPosList.get(j);
+            area += this_point.getX() * next_point.getZ() - this_point.getZ() * next_point.getX();
         }
         return Math.abs(area / 2.0);
     }
@@ -207,12 +209,8 @@ public class DisplayMaths {
         return ellipse;
     }
 
-    public static Color getRandomColor() {
-        Random rand = new Random();
-        float r = rand.nextFloat();
-        float g = rand.nextFloat();
-        float b = rand.nextFloat();
-        return new Color(r, g, b);
+    public static Color getRandomColor(Random rand) {
+        return new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
     }
 
     @FunctionalInterface
@@ -229,10 +227,8 @@ public class DisplayMaths {
         Rectangle rectangle = shape.getBounds();
         List<BPos> bPosList = new ArrayList<>();
         Function4<Shape, Integer, Integer, Boolean> test = Shape::contains;
-        if (shape instanceof Polygon) {
-            if (nPoints <= 2) {
-                test = (s, x, y) -> s.intersects(x, y, 1, 1);
-            }
+        if (shape instanceof Polygon && nPoints <= 2) {
+            test = (s, x, y) -> s.intersects(x, y, 1, 1);
         }
         for (int x = 0; x < rectangle.getWidth(); x++) {
             int X = (int) (rectangle.getX() + x);

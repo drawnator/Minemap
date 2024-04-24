@@ -110,70 +110,22 @@ public class MineMap extends JFrame {
         int blockX;
         int blockZ;
         int size;
-        if (Arrays.asList(args).contains("--seed")) {
-            int idx = Arrays.asList(args).indexOf("--seed");
-            if (idx + 1 >= args.length) {
-                System.err.println("Error no seed provided");
-                return;
-            }
-            try {
-                seed = Long.parseLong(args[idx + 1]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid seed provided, should be numeric only for now");
-                return;
-            }
-        } else {
-            System.err.println("No seed argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
-        if (Arrays.asList(args).contains("--version")) {
-            int idx = Arrays.asList(args).indexOf("--version");
-            if (idx + 1 >= args.length) {
-                System.err.println("Error no version provided");
-                return;
-            }
-            version = MCVersion.fromString(args[idx + 1]);
-            if (version == null) {
-                System.err.println("Invalid version provided");
-                return;
-            }
-        } else {
-            System.err.println("No version argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
-        if (Arrays.asList(args).contains("--pos")) {
-            int idx = Arrays.asList(args).indexOf("--pos");
-            if (idx + 2 > args.length) {
-                System.err.println("Error no pos provided");
-                return;
-            }
-            try {
-                blockX = Integer.parseInt(args[idx + 1]);
-                blockZ = Integer.parseInt(args[idx + 2]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid pos provided, should be numeric");
-                return;
-            }
-        } else {
-            System.out.println("No pos argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
-        if (Arrays.asList(args).contains("--size")) {
-            int idx = Arrays.asList(args).indexOf("--size");
-            if (idx + 1 > args.length) {
-                System.err.println("Error no size provided");
-                return;
-            }
-            try {
-                size = Integer.parseInt(args[idx + 1]);
-            } catch (NumberFormatException ignored) {
-                System.err.println("Invalid size provided, should be numeric");
-                return;
-            }
-        } else {
-            System.err.println("No size argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
-            return;
-        }
+        Long seedOrNull = getSeed(args);
+        if (seedOrNull == null) return;
+        seed = seedOrNull;
+        MCVersion versionOrNull = getVersion(args);
+        if (versionOrNull == null) return;
+        version = versionOrNull;
+        Integer[] coordinates = getCoordinates(args);
+        if (coordinates.equals(new Integer[2])) return;
+        blockX = coordinates[0];blockZ = coordinates[1];
+        Integer sizeOrNull = getSize(args);
+        if (sizeOrNull == null) return;
+        size = sizeOrNull;
+        instantiateScreenshot(version, seed, blockX, blockZ, size);
+    }
+
+    private static void instantiateScreenshot(MCVersion version, long seed, int blockX, int blockZ, int size) throws IOException {
         MapSettings settings = new MapSettings(version, OVERWORLD).refresh();
         MapContext context = new MapContext(seed, settings);
         settings.hide(SlimeChunk.class, Mineshaft.class);
@@ -181,6 +133,114 @@ public class MineMap extends JFrame {
         BufferedImage screenshot = getScreenShot(fragment, size, size);
         ImageIO.write(screenshot, "png", new File(context.worldSeed + ".png"));
         System.out.println("Done!");
+    }
+
+    private static Integer[] getCoordinates(String[] args){
+        Integer[] coordinates = new Integer[2];
+        if (Arrays.asList(args).contains("--pos")) {
+            Integer idx = getPosIdx(args);
+            if (idx == null) return coordinates;
+            try {
+                coordinates[0] = Integer.parseInt(args[idx + 1]);
+                coordinates[1] = Integer.parseInt(args[idx + 2]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid pos provided, should be numeric");
+                return new Integer[2];
+            }
+        } else {
+            System.out.println("No pos argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return coordinates;
+    }
+
+    private static Integer getSize(String[] args){
+        Integer size = null;
+        if (Arrays.asList(args).contains("--size")) {
+            Integer idx = getSizeIdx(args);
+            if (idx == null) return size;
+            try {
+                size = Integer.parseInt(args[idx + 1]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid size provided, should be numeric");
+                return null;
+            }
+        } else {
+            System.err.println("No size argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return size;
+    }
+
+    private static MCVersion getVersion(String[] args){
+        MCVersion version = null;
+        if (Arrays.asList(args).contains("--version")) {
+            Integer idx = getVersionIdx(args);
+            if (idx == null) return version;
+            version = MCVersion.fromString(args[idx + 1]);
+            if (check_version(version)) return null;
+        } else {
+            System.err.println("No version argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return version;
+    }
+
+    private static Long getSeed(String[] args){
+        Long seed = null;
+        if (Arrays.asList(args).contains("--seed")) {
+            Integer idx = getSeedIdx(args);
+            if (idx == null) return seed;
+            try {
+                seed = Long.parseLong(args[idx + 1]);
+            } catch (NumberFormatException ignored) {
+                System.err.println("Invalid seed provided, should be numeric only for now");
+                return null;
+            }
+        } else {
+            System.err.println("No seed argument provided, command is --screenshot --seed <seed> --version <version> --pos <x> <z> --size <size>");
+        }
+        return seed;
+    }
+    private static boolean check_version(MCVersion version) {
+        if (version == null) {
+            System.err.println("Invalid version provided");
+            return true;
+        }
+        return false;
+    }
+
+    private static Integer getSizeIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--size");
+        if (idx + 1 > args.length) {
+            System.err.println("Error no size provided");
+            return null;
+        }
+        return idx;
+    }
+
+    private static Integer getPosIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--pos");
+        if (idx + 2 > args.length) {
+            System.err.println("Error no pos provided");
+            return null;
+        }
+        return idx;
+    }
+
+    private static Integer getVersionIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--version");
+        if (idx + 1 >= args.length) {
+            System.err.println("Error no version provided");
+            return null;
+        }
+        return idx;
+    }
+
+    private static Integer getSeedIdx(String[] args) {
+        int idx = Arrays.asList(args).indexOf("--seed");
+        if (idx + 1 >= args.length) {
+            System.err.println("Error no seed provided");
+            return null;
+        }
+        return idx;
     }
 
     private static BufferedImage getScreenShot(Fragment fragment, int width, int height) {
@@ -209,17 +269,7 @@ public class MineMap extends JFrame {
             shouldUseVersion = true;
         }
         // TODO add more build options here
-        if (shouldAsk) {
-            int dialogResult = JOptionPane.showConfirmDialog(
-                null,
-                String.format("Would you like to update to the version %s of Minemap?", release.getSecond()),
-                "Update available for Minemap " + MineMap.version,
-                JOptionPane.YES_NO_OPTION
-            );
-            if (dialogResult != 0) {
-                return;
-            }
-        }
+        if (update_dialogue_box(shouldAsk, release)) return;
         JDialog downloadPopup = new ModalPopup(null, "Downloading new MineMap version");
         downloadPopup.setSize(new Dimension(300, 50));
         downloadPopup.setShape(new RoundRectangle2D.Double(0, 0, 300, 50, 50, 50));
@@ -235,6 +285,10 @@ public class MineMap extends JFrame {
         }
         downloadPopup.setVisible(false);
         downloadPopup.dispose();
+        change_version(newVersion, shouldUseVersion);
+    }
+
+    private static void change_version(String newVersion, boolean shouldUseVersion) {
         if (newVersion != null) {
             Process ps;
             try {
@@ -257,6 +311,21 @@ public class MineMap extends JFrame {
                 System.exit(0);
             }
         }
+    }
+
+    private static boolean update_dialogue_box(boolean shouldAsk, Pair<Pair<String, String>, String> release) {
+        if (shouldAsk) {
+            int dialogResult = JOptionPane.showConfirmDialog(
+                null,
+                String.format("Would you like to update to the version %s of Minemap?", release.getSecond()),
+                "Update available for Minemap " + MineMap.version,
+                JOptionPane.YES_NO_OPTION
+            );
+            if (dialogResult != 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static SwingWorker<String, Void> getDownloadWorker(JDialog parent, Pair<String, String> newVersion) {
@@ -338,6 +407,42 @@ public class MineMap extends JFrame {
         Object[] pinned = Configs.USER_PROFILE.getPinnedSeeds().toArray();
         int len = Math.min(MAX_SIZE, pinned.length);
         List<Pair<Pair<MCVersion, String>, com.seedfinding.mccore.state.Dimension>> list = new ArrayList<>();
+        check_seed(len, pinned, list);
+        Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds = list.stream()
+            .collect(Collectors.groupingBy(Pair::getFirst, Collectors.mapping(Pair::getSecond, Collectors.toList())));
+        configTabGroup(pinnedSeeds, cores);
+    }
+
+    private static void configTabGroup(Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds, int cores) {
+        for (Map.Entry<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeed : pinnedSeeds.entrySet()) {
+            pinnedSeed.getValue().sort(com.seedfinding.mccore.state.Dimension::compareTo);
+            TabGroup tabGroup = MineMap.INSTANCE.worldTabs.load(
+                pinnedSeed.getKey().getFirst(),
+                pinnedSeed.getKey().getSecond(),
+                Configs.USER_PROFILE.getThreadCount(cores),
+                pinnedSeed.getValue()
+            );
+            setTabGroupPanels(tabGroup);
+        }
+    }
+
+    private static void setTabGroupPanels(TabGroup tabGroup) {
+        if (tabGroup != null) {
+            tabGroup.getMapPanels().forEach(e -> e.getHeader().setSaved(true, false));
+            tabGroup.getMapPanels().forEach(e -> Arrays.stream(e.manager.popup.getComponents()).forEach(c -> {
+                    if (c instanceof JMenuItem) {
+                        JMenuItem item = ((JMenuItem) c);
+                        if (item.getText().equals("Save tab")) {
+                            item.setText("Unsave tab");
+                        }
+                    }
+                }
+
+            ));
+        }
+    }
+
+    private static void check_seed(int len, Object[] pinned, List<Pair<Pair<MCVersion, String>, com.seedfinding.mccore.state.Dimension>> list) {
         for (int i = 1; i <= len; i++) {
             String config = (String) pinned[len - i];
             String[] split = config.split("::");
@@ -359,30 +464,6 @@ public class MineMap extends JFrame {
                 }
             } else {
                 Logger.LOGGER.severe("Saved seed is not in the proper format");
-            }
-        }
-        Map<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeeds = list.stream()
-            .collect(Collectors.groupingBy(Pair::getFirst, Collectors.mapping(Pair::getSecond, Collectors.toList())));
-        for (Map.Entry<Pair<MCVersion, String>, List<com.seedfinding.mccore.state.Dimension>> pinnedSeed : pinnedSeeds.entrySet()) {
-            pinnedSeed.getValue().sort(com.seedfinding.mccore.state.Dimension::compareTo);
-            TabGroup tabGroup = MineMap.INSTANCE.worldTabs.load(
-                pinnedSeed.getKey().getFirst(),
-                pinnedSeed.getKey().getSecond(),
-                Configs.USER_PROFILE.getThreadCount(cores),
-                pinnedSeed.getValue()
-            );
-            if (tabGroup != null) {
-                tabGroup.getMapPanels().forEach(e -> e.getHeader().setSaved(true, false));
-                tabGroup.getMapPanels().forEach(e -> Arrays.stream(e.manager.popup.getComponents()).forEach(c -> {
-                        if (c instanceof JMenuItem) {
-                            JMenuItem item = ((JMenuItem) c);
-                            if (item.getText().equals("Save tab")) {
-                                item.setText("Unsave tab");
-                            }
-                        }
-                    }
-
-                ));
             }
         }
     }

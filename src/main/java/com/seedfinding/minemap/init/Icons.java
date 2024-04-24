@@ -124,38 +124,36 @@ public class Icons {
         return new SwingWorker<Pair<MCVersion, String>, Void>() {
             @Override
             protected Pair<MCVersion, String> doInBackground() {
-                if (Assets.downloadManifest(MCVersion.latest())) {
-                    MCVersion version = Assets.getLatestVersion();
-                    if (version != null) {
-                        if (Assets.downloadVersionManifest(version, false)) {
-                            String assetName = Assets.downloadVersionAssets(version, false);
-                            if (assetName != null) {
-                                MCVersion assetVersion = MCVersion.fromString(assetName.replace(".json", ""));
-                                if (assetVersion != null) {
-                                    if (Assets.downloadVersionManifest(assetVersion, false)) {
-                                        String clientName = Assets.downloadClientJar(assetVersion, false);
-                                        if (clientName != null) {
-                                            return new Pair<>(assetVersion, clientName);
-                                        } else {
-                                            Logger.LOGGER.warning("Client jar could not be downloaded");
-                                        }
-                                    } else {
-                                        Logger.LOGGER.warning("Version manifest could not be downloaded");
-                                    }
-                                } else {
-                                    Logger.LOGGER.warning(String.format("Assets version could not be converted to a viable version for %s", assetName));
-                                }
-                            } else {
-                                Logger.LOGGER.warning("Assets index could not be downloaded");
-                            }
-                        } else {
-                            Logger.LOGGER.warning(String.format("Version manifest could not be downloaded for %s", version));
-                        }
-                    } else {
-                        Logger.LOGGER.warning("Manifest does not contain a valid latest release");
-                    }
+                if (!Assets.downloadManifest(MCVersion.latest())) return null;
+                MCVersion version = Assets.getLatestVersion();
+                if (version == null) {
+                    Logger.LOGGER.warning("Manifest does not contain a valid latest release");
+                    return null;
                 }
-                return null;
+                if (Assets.downloadVersionManifest(version, true)) {
+                    Logger.LOGGER.warning(String.format("Version manifest could not be downloaded for %s", version));
+                    return null;
+                }
+                String assetName = Assets.downloadVersionAssets(version, false);
+                if (assetName == null) {
+                    Logger.LOGGER.warning("Assets index could not be downloaded");
+                    return null;
+                }
+                MCVersion assetVersion = MCVersion.fromString(assetName.replace(".json", ""));
+                if (assetVersion == null) {
+                    Logger.LOGGER.warning(String.format("Assets version could not be converted to a viable version for %s", assetName));
+                    return null;
+                }
+                if (Assets.downloadVersionManifest(assetVersion, true)) {
+                    Logger.LOGGER.warning("Version manifest could not be downloaded");
+                    return null;
+                }
+                String clientName = Assets.downloadClientJar(assetVersion, false);
+                if (clientName == null) {
+                    Logger.LOGGER.warning("Client jar could not be downloaded");
+                    return null;
+                }
+                return new Pair<>(assetVersion, clientName);
             }
 
             @Override

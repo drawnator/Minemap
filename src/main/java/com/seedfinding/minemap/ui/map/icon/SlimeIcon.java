@@ -9,7 +9,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 
 import java.util.List;
 
-public class SlimeIcon extends DynamicIcon {
+public class SlimeIcon extends AbstractDynamicIcon {
 
     public SlimeIcon(MapContext context) {
         super(context, 16);

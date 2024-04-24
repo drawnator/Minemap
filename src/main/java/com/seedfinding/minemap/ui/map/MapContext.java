@@ -100,27 +100,30 @@ public class MapContext {
     public void calculateStarts(MapPanel mapPanel) {
         Stronghold stronghold = this.getSettings().getFeatureOfType(this.dimension == Dimension.OVERWORLD ? Stronghold.class : NEStronghold.class);
 
-        if (stronghold != null && !Configs.USER_PROFILE.getUserSettings().disableStronghold) {
-            BiomeSource biomeSource = this.getBiomeSource(Dimension.OVERWORLD);
-            if (biomeSource != null) {
-                if (this.dimension == Dimension.OVERWORLD || this.dimension == Dimension.NETHER) {
-                    synchronized (MineMap.version) {
-                        Thread t = new Thread(
-                            () -> {
-                                this.starts = stronghold.getStarts(biomeSource, 128, new JRand(0L));
-                                if (Configs.USER_PROFILE.getUserSettings().allowFlashing) mapPanel.restart();
-                            }
-                        );
-                        t.start();
-                        if (!Configs.USER_PROFILE.getUserSettings().allowFlashing) {
-                            try {
-                                t.join();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                                Logger.LOGGER.severe("thread didn't work " + e);
-                            }
-                        }
-                    }
+        if (stronghold == null || Configs.USER_PROFILE.getUserSettings().disableStronghold) {
+            return;
+        }
+        BiomeSource biomeSource = this.getBiomeSource(Dimension.OVERWORLD);
+        if (biomeSource == null) {
+            return;
+        }
+        if (this.dimension != Dimension.OVERWORLD && this.dimension != Dimension.NETHER) {
+            return;
+        }
+        synchronized (MineMap.version) {
+            Thread t = new Thread(
+                () -> {
+                    this.starts = stronghold.getStarts(biomeSource, 128, new JRand(0L));
+                    if (Configs.USER_PROFILE.getUserSettings().allowFlashing) mapPanel.restart();
+                }
+            );
+            t.start();
+            if (!Configs.USER_PROFILE.getUserSettings().allowFlashing) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Logger.LOGGER.severe("thread didn't work " + e);
                 }
             }
         }

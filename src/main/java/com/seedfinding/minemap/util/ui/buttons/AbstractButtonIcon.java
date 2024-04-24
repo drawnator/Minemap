@@ -8,7 +8,7 @@ import com.seedfinding.minemap.util.ui.graphics.RoundedBorder;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class ButtonIcon extends JButton {
+public abstract class AbstractButtonIcon extends JButton {
     public final int size;
     public final int inset;
     public final float factor;
@@ -16,11 +16,11 @@ public abstract class ButtonIcon extends JButton {
     public final boolean border;
     public Color backgroundColor;
 
-    public ButtonIcon(int size, int inset, float factor, boolean background, Color backgroundColor) {
+    public AbstractButtonIcon(int size, int inset, float factor, boolean background, Color backgroundColor) {
         this(size, inset, factor, background, backgroundColor, true);
     }
 
-    public ButtonIcon(int size, int inset, float factor, boolean background, Color backgroundColor, boolean border) {
+    public AbstractButtonIcon(int size, int inset, float factor, boolean background, Color backgroundColor, boolean border) {
         super();
         this.size = size;
         this.inset = inset;
@@ -30,19 +30,19 @@ public abstract class ButtonIcon extends JButton {
         this.backgroundColor = backgroundColor;
     }
 
-    public ButtonIcon(int size, int inset, float factor) {
+    public AbstractButtonIcon(int size, int inset, float factor) {
         this(size, inset, factor, false, Color.WHITE);
     }
 
-    public ButtonIcon(int size, int inset) {
+    public AbstractButtonIcon(int size, int inset) {
         this(size, inset, 1.7F);
     }
 
-    public ButtonIcon(int size) {
+    public AbstractButtonIcon(int size) {
         this(size, 1);
     }
 
-    public ButtonIcon() {
+    public AbstractButtonIcon() {
         this(16);
     }
 

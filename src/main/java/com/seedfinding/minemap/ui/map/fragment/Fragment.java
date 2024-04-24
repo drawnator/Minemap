@@ -12,8 +12,8 @@ import com.seedfinding.minemap.init.Configs;
 import com.seedfinding.minemap.ui.map.IconManager;
 import com.seedfinding.minemap.ui.map.MapContext;
 import com.seedfinding.minemap.ui.map.MapPanel;
-import com.seedfinding.minemap.ui.map.icon.IconRenderer;
-import com.seedfinding.minemap.ui.map.tool.Tool;
+import com.seedfinding.minemap.ui.map.icon.AbstractIconRenderer;
+import com.seedfinding.minemap.ui.map.tool.AbstractTool;
 import com.seedfinding.minemap.util.data.DrawInfo;
 import com.seedfinding.minemap.util.math.DisplayMaths;
 import com.seedfinding.minemap.util.ui.graphics.Graphic;
@@ -138,8 +138,8 @@ public class Fragment {
         }
     }
 
-    public void drawTools(Graphics graphics, DrawInfo info, ArrayList<Tool> tools) {
-        for (Tool tool : tools) {
+    public void drawTools(Graphics graphics, DrawInfo info, ArrayList<AbstractTool> tools) {
+        for (AbstractTool tool : tools) {
             if (tool.isPartial()) {
                 if (tool.isMultiplePolygon()) {
                     if (tool.getPartialShapes() == null) continue;
@@ -156,7 +156,7 @@ public class Fragment {
     }
 
 
-    private void drawSinglePolygon(Graphics graphics, DrawInfo info, Tool tool, Area polygon) {
+    private void drawSinglePolygon(Graphics graphics, DrawInfo info, AbstractTool tool, Area polygon) {
         Area rectangle = new Area(this.getRectangle());
 
         polygon.intersect(rectangle);
@@ -215,7 +215,7 @@ public class Fragment {
 
         for (Map.Entry<Feature<?, ?>, List<BPos>> entry : this.features.entrySet()) {
             if (!this.context.getSettings().isActive(entry.getKey()) || entry.getValue() == null) continue;
-            IconRenderer renderer = this.context.getIconManager().getFor(entry.getKey());
+            AbstractIconRenderer renderer = this.context.getIconManager().getFor(entry.getKey());
             ArrayList<BPos> newList = new ArrayList<>(entry.getValue());
             newList.removeIf(pos -> !renderer.isHovered(this, checkPos, pos, width, height, entry.getKey()));
             map.put(entry.getKey(), newList);

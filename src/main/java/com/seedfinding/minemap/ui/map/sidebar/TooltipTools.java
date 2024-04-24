@@ -7,7 +7,7 @@ import com.seedfinding.mccore.util.pos.BPos;
 import com.seedfinding.minemap.MineMap;
 import com.seedfinding.minemap.init.Configs;
 import com.seedfinding.minemap.ui.map.MapPanel;
-import com.seedfinding.minemap.ui.map.tool.Tool;
+import com.seedfinding.minemap.ui.map.tool.AbstractTool;
 import com.seedfinding.minemap.util.data.Str;
 import com.seedfinding.minemap.util.math.DisplayMaths;
 import com.seedfinding.minemap.util.ui.buttons.InfoButton;
@@ -37,7 +37,7 @@ public class TooltipTools extends JPanel {
 
     public void updateToolsMetrics() {
         this.removeAll();
-        for (Tool tool : map.manager.toolsList) {
+        for (AbstractTool tool : map.manager.toolsList) {
             this.add(new Entry(tool, e -> {
                 map.manager.removeTool(tool);
                 map.rightBar.tooltip.updateToolsMetrics();
@@ -52,7 +52,7 @@ public class TooltipTools extends JPanel {
 
     public static class Entry extends RoundedFloatingEntry {
 
-        public Entry(Tool tool, Consumer<MouseEvent> onClose) {
+        public Entry(AbstractTool tool, Consumer<MouseEvent> onClose) {
             super(String.join("\n", tool.getMetricString()), tool.getClass(), e -> onClose);
 
             ColorChooserButton colorChooser = new ColorChooserButton(tool.getColor());
@@ -65,7 +65,7 @@ public class TooltipTools extends JPanel {
             this.add(infoButton, 3);
         }
 
-        public static void buildInfoWindows(Tool tool) {
+        public static void buildInfoWindows(AbstractTool tool) {
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
             if (map == null) return;
             Shape shape = tool.getExactShape();

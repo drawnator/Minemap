@@ -10,11 +10,11 @@ import com.seedfinding.minemap.util.data.DrawInfo;
 import java.awt.*;
 import java.util.List;
 
-public abstract class IconRenderer {
+public abstract class AbstractIconRenderer {
 
     private final MapContext context;
 
-    public IconRenderer(MapContext context) {
+    public AbstractIconRenderer(MapContext context) {
         this.context = context;
     }
 

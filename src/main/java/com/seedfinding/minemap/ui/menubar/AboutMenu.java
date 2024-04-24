@@ -9,7 +9,6 @@ import com.seedfinding.minemap.ui.dialog.CheatingHeightDialog;
 import com.seedfinding.minemap.ui.dialog.IconSizeDialog;
 import com.seedfinding.minemap.ui.map.MapPanel;
 import com.seedfinding.minemap.util.ui.interactive.LabelController;
-import org.jdesktop.swingx.VerticalLayout;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -23,7 +22,7 @@ import java.net.URISyntaxException;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED;
 
-public class AboutMenu extends Menu {
+public class AboutMenu extends AbstractMenu {
 
     private final JMenu lookMenu;
     private final Box lookMenuLight;
@@ -190,7 +189,7 @@ public class AboutMenu extends Menu {
     }
 
 
-    public Runnable aboutPanel() {
+    public final Runnable aboutPanel() {
         return () -> {
             JFrame frame = new JFrame("About Minemap " + MineMap.version);
 
@@ -202,14 +201,12 @@ public class AboutMenu extends Menu {
             textArea.setText(getAbout());
             textArea.setFont(new Font("Times", Font.PLAIN, 16));
             textArea.addHyperlinkListener(linkEvent -> {
-                if (linkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    if (Desktop.isDesktopSupported()) {
+                if (linkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED && Desktop.isDesktopSupported()) {
                         try {
                             Desktop.getDesktop().browse(linkEvent.getURL().toURI());
                         } catch (IOException | URISyntaxException error) {
                             Logger.LOGGER.warning(String.format("URL could not be opened for %s, error: %s", linkEvent.getURL(), error));
                         }
-                    }
                 }
             });
             textArea.setCaretPosition(0);
@@ -227,7 +224,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable iconSize() {
+    public final Runnable iconSize() {
         return () -> {
             this.activate.run();
             JDialog dialog = new IconSizeDialog(this.deactivate);
@@ -235,7 +232,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable cheatingHeight() {
+    public final Runnable cheatingHeight() {
         return () -> {
             this.activate.run();
             JDialog dialog = new CheatingHeightDialog(this.deactivate);
@@ -243,7 +240,7 @@ public class AboutMenu extends Menu {
         };
     }
 
-    public Runnable settingsFolder() {
+    public final Runnable settingsFolder() {
         return () -> {
             Desktop desktop = Desktop.getDesktop();
             File dir = new File(MineMap.ROOT_DIR);

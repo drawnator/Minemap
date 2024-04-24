@@ -34,11 +34,11 @@ public class ColorChooserButton extends JButton {
         return current;
     }
 
-    public void setSelectedColor(Color newColor) {
+    public final void setSelectedColor(Color newColor) {
         setSelectedColor(newColor, true);
     }
 
-    public void setSelectedColor(Color newColor, boolean notify) {
+    public final void setSelectedColor(Color newColor, boolean notify) {
 
         if (newColor == null) return;
 

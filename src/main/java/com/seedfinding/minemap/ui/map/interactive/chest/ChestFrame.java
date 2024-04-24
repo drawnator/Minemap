@@ -57,7 +57,7 @@ public class ChestFrame extends JFrame {
     }
 
     @Override
-    public Dimension getPreferredSize() {
+    public final Dimension getPreferredSize() {
         return new Dimension(CHEST_WIDTH, HEADER_HEIGHT + CHEST_HEIGHT);
     }
 

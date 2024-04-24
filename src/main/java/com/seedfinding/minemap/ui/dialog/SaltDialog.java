@@ -13,7 +13,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class SaltDialog extends Dialog {
+public class SaltDialog extends AbstractDialog {
 
     // those are cursed but what could I do? Inject myself between super and initcomponent?
     public static Callable<MCVersion> versionCallable = () -> MineMap.INSTANCE.worldTabs.getSelectedMapPanel() != null ? MineMap.INSTANCE.worldTabs.getSelectedMapPanel().context.version : MCVersion.values()[0];

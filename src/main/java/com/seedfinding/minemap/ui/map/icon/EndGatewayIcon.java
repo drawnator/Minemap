@@ -9,7 +9,7 @@ import com.seedfinding.minemap.ui.map.fragment.Fragment;
 
 import java.util.List;
 
-public class EndGatewayIcon extends StaticIcon {
+public class EndGatewayIcon extends AbstractStaticIcon {
 
     public EndGatewayIcon(MapContext context) {
         super(context);

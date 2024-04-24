@@ -13,7 +13,7 @@ import com.seedfinding.minemap.feature.chests.loot.*;
 import java.util.LinkedHashMap;
 
 public class Chests {
-    private static final LinkedHashMap<Class<? extends Feature<?, ?>>, Loot.LootFactory<?>> REGISTRY = new LinkedHashMap<>();
+    private static final LinkedHashMap<Class<? extends Feature<?, ?>>, AbstractLoot.LootFactory<?>> REGISTRY = new LinkedHashMap<>();
     // map the registry keys to their super present in FeatureUtils
     private static final LinkedHashMap<Class<? extends Feature<?, ?>>, Class<? extends Feature<?, ?>>> SUPER_REGISTRY = new LinkedHashMap<>();
 
@@ -28,16 +28,16 @@ public class Chests {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Feature<?, ?>> void register(Class<T> clazz, Loot.LootFactory<?> lootFactory, boolean isSuper) {
+    public static <T extends Feature<?, ?>> void register(Class<T> clazz, AbstractLoot.LootFactory<?> lootFactory, boolean isSuper) {
         REGISTRY.put(clazz, lootFactory);
         SUPER_REGISTRY.put(clazz, isSuper ? clazz : (Class<? extends Feature<?, ?>>) clazz.getSuperclass());
     }
 
-    public static <T extends Feature<?, ?>> Loot.LootFactory<?> get(Class<T> clazz) {
+    public static <T extends Feature<?, ?>> AbstractLoot.LootFactory<?> get(Class<T> clazz) {
         return REGISTRY.get(clazz);
     }
 
-    public static LinkedHashMap<Class<? extends Feature<?, ?>>, Loot.LootFactory<?>> getRegistry() {
+    public static LinkedHashMap<Class<? extends Feature<?, ?>>, AbstractLoot.LootFactory<?>> getRegistry() {
         return REGISTRY;
     }
 
