@@ -1,5 +1,7 @@
 package com.seedfinding.minemap.ui.map.icon;
 
+import com.seedfinding.mcbiome.layer.BiomeLayer;
+import com.seedfinding.mcbiome.source.LayeredBiomeSource;
 import com.seedfinding.mccore.rand.ChunkRand;
 import com.seedfinding.mccore.state.Dimension;
 import com.seedfinding.mccore.util.pos.BPos;
@@ -50,7 +52,9 @@ public class RegionIcon extends AbstractStaticIcon {
                     positions.add(currentPos);
                     return;
                 }
-                if (structure.canSpawn(pos.getX(), pos.getZ(), this.getContext().getBiomeSource(getDimension()))) {
+                LayeredBiomeSource<? extends BiomeLayer> biome = this.getContext().getBiomeSource(getDimension());
+                boolean is_spawnable_structure = structure.canSpawn(pos.getX(), pos.getZ(), biome);
+                if (is_spawnable_structure) {
                     TerrainGenerator generator = this.getContext().getTerrainGenerator(structure).getFirst();
                     if (generator == null) {
                         positions.add(currentPos);
