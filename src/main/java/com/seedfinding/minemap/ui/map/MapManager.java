@@ -66,6 +66,8 @@ public class MapManager {
         this.blocksPerFragment = blocksPerFragment;
         this.pixelsPerFragment = (int) (DEFAULT_PIXELS_PER_FRAGMENT * (this.blocksPerFragment / DEFAULT_REGION_SIZE));
 
+        add_mouse_motion_listener_clicked();
+    private void add_mouse_motion_listener_clicked() {
         this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
             if (this.mousePointer == null) return;
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -77,6 +79,7 @@ public class MapManager {
                 this.panel.repaint();
             }
         }));
+    }
 
         this.panel.addMouseMotionListener(Events.Mouse.onMoved(e -> {
             this.mousePointer = e.getPoint();
