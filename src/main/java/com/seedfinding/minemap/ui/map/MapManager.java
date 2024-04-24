@@ -173,33 +173,41 @@ public class MapManager {
                 this.panel.scheduler.forEachFragment(fragment -> fragment.onClicked(pos.getX(), pos.getZ()));
                 if (selectedTool == null) {
                     ArrayList<Pair<Feature<?, ?>, List<BPos>>> features = FindOnMap.findFeaturesSelected();
-                    if (features != null && !features.isEmpty()) {
-                        for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
-                            Feature<?, ?> feature = featureListPair.getFirst();
-                            if (feature instanceof RegionStructure<?, ?>) {
-                                for (BPos bPos : featureListPair.getSecond()) {
-                                    this.generateChest(feature, bPos);
-                                }
-                            }
-                        }
-                    } else {
-                        this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-                    }
+                    click_without_tool(features);
                 } else {
-                    // if tool has no more points to it
-                    if (!selectedTool.addPoint(pos)) {
-                        selectedTool = selectedTool.duplicate();
-                        toolsList.add(selectedTool);
-                        selectedTool.addPoint(pos);
-                    }
-                    // weird case when removed
-                    if (selectedTool.getPointsTraced() > 0 && toolsList.isEmpty()) {
-                        toolsList.add(selectedTool);
-                    }
+                    click_with_tool(pos);
                 }
                 this.panel.rightBar.tooltip.updateToolsMetrics();
             }
         }));
+    }
+
+    private void click_with_tool(BPos pos) {
+        // if tool has no more points to it
+        if (!selectedTool.addPoint(pos)) {
+            selectedTool = selectedTool.duplicate();
+            toolsList.add(selectedTool);
+            selectedTool.addPoint(pos);
+        }
+        // weird case when removed
+        if (selectedTool.getPointsTraced() > 0 && toolsList.isEmpty()) {
+            toolsList.add(selectedTool);
+        }
+    }
+
+    private void click_without_tool(ArrayList<Pair<Feature<?, ?>, List<BPos>>> features) {
+        if (!features.equals(new ArrayList<>()) && !features.isEmpty()) {
+            for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
+                Feature<?, ?> feature = featureListPair.getFirst();
+                if (feature instanceof RegionStructure<?, ?>) {
+                    for (BPos bPos : featureListPair.getSecond()) {
+                        this.generateChest(feature, bPos);
+                    }
+                }
+            }
+        } else {
+            this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        }
     }
 
     private void add_popup_menu_listener(JMenuItem save, JMenuItem rename, JMenuItem settings, List<Supplier<AbstractTool>> tools) {
@@ -208,7 +216,7 @@ public class MapManager {
                                        public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                                            popup.removeAll();
                                            ArrayList<Pair<Feature<?, ?>, List<BPos>>> features = FindOnMap.findFeaturesSelected();
-                                           if (features != null && !features.isEmpty()) {
+                                           if (!features.equals(new ArrayList<>()) && !features.isEmpty()) {
                                                for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
                                                    processFeaturePositions(featureListPair);
                                                }
