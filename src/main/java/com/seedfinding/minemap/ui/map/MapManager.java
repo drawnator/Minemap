@@ -157,10 +157,8 @@ public class MapManager {
 
     private void add_mouse_listener_left_cursor() {
         this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                if (selectedTool == null) {
+            if (SwingUtilities.isLeftMouseButton(e) && selectedTool == null) {
                     this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
             }
         }));
     }
