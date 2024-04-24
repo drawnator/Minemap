@@ -70,9 +70,59 @@ public class MapManager {
 
         add_mouse_motion_listener_moved();
 
+        // update initial so we don't have a weird black box at the top left corner
+        SwingUtilities.invokeLater(updateInit());
+
         add_mouse_listener_left_tool();
 
         add_mouse_listener_left_cursor();
+
+        this.panel.addMouseWheelListener(e -> {
+            boolean isModifier = Configs.USER_PROFILE.getUserSettings().modifierDown.getModifier().apply(e);
+            boolean zoomIn = e.getUnitsToScroll() > 0;
+            zoom(zoomIn, isModifier).run();
+        });
+
+        this.popup = new JPopupMenu();
+
+        JMenuItem save = new JMenuItem("Save tab");
+        save.setBorder(new EmptyBorder(5, 15, 5, 15));
+        if (this.panel.getHeader() != null && this.panel.getHeader().isSaved()) {
+            save.setText("Unsave tab");
+        }
+        save.addMouseListener(Events.Mouse.onReleased(e -> {
+            boolean newState = !MineMap.INSTANCE.worldTabs.getSelectedHeader().isSaved();
+            MineMap.INSTANCE.worldTabs.getSelectedHeader().setSaved(newState);
+            save.setText(newState ? "Unsave Tab" : "Save Tab");
+        }));
+        popup.add(save);
+
+        JMenuItem rename = new JMenuItem("Rename");
+        rename.setBorder(new EmptyBorder(5, 15, 5, 15));
+
+        rename.addMouseListener(Events.Mouse.onReleased(e -> {
+            RenameTabDialog renameTabDialog = new RenameTabDialog(() -> {});
+            renameTabDialog.setVisible(true);
+        }));
+        popup.add(rename);
+
+        JMenuItem settings = new JMenuItem("Settings");
+        settings.setBorder(new EmptyBorder(5, 15, 5, 15));
+        settings.addMouseListener(Events.Mouse.onReleased(e -> this.panel.leftBar.settings.setVisible(!panel.leftBar.settings.isVisible())));
+
+        chestWindows = new ChestFrame(this.panel.chestInstance);
+        portalMenu = new Portal(this.panel);
+
+        popup.add(settings);
+        this.rng = new Random();
+        List<Supplier<AbstractTool>> tools = Arrays.asList(
+            () -> new Ruler(rng),
+            () -> new Area(rng),
+            () -> new Circle(rng),
+            () -> new Polyline(rng));
+        this.addTools(popup, tools);
+        add_popup_menu_listener(save, rename, settings, tools);
+    }
 
     private void add_mouse_motion_listener_clicked() {
         this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
@@ -105,8 +155,6 @@ public class MapManager {
         }));
     }
 
-        // update initial so we don't have a weird black box at the top left corner
-        SwingUtilities.invokeLater(updateInit());
     private void add_mouse_listener_left_cursor() {
         this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -154,58 +202,7 @@ public class MapManager {
         }));
     }
 
-        this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                if (selectedTool == null) {
-                    this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-            }
-        }));
-
-        this.panel.addMouseWheelListener(e -> {
-            boolean isModifier = Configs.USER_PROFILE.getUserSettings().modifierDown.getModifier().apply(e);
-            boolean zoomIn = e.getUnitsToScroll() > 0;
-            zoom(zoomIn, isModifier).run();
-        });
-
-        this.popup = new JPopupMenu();
-
-        JMenuItem save = new JMenuItem("Save tab");
-        save.setBorder(new EmptyBorder(5, 15, 5, 15));
-        if (this.panel.getHeader() != null && this.panel.getHeader().isSaved()) {
-            save.setText("Unsave tab");
-        }
-        save.addMouseListener(Events.Mouse.onReleased(e -> {
-            boolean newState = !MineMap.INSTANCE.worldTabs.getSelectedHeader().isSaved();
-            MineMap.INSTANCE.worldTabs.getSelectedHeader().setSaved(newState);
-            save.setText(newState ? "Unsave Tab" : "Save Tab");
-        }));
-        popup.add(save);
-
-        JMenuItem rename = new JMenuItem("Rename");
-        rename.setBorder(new EmptyBorder(5, 15, 5, 15));
-
-        rename.addMouseListener(Events.Mouse.onReleased(e -> {
-            RenameTabDialog renameTabDialog = new RenameTabDialog(() -> {});
-            renameTabDialog.setVisible(true);
-        }));
-        popup.add(rename);
-
-        JMenuItem settings = new JMenuItem("Settings");
-        settings.setBorder(new EmptyBorder(5, 15, 5, 15));
-        settings.addMouseListener(Events.Mouse.onReleased(e -> this.panel.leftBar.settings.setVisible(!panel.leftBar.settings.isVisible())));
-
-        chestWindows = new ChestFrame(this.panel.chestInstance);
-        portalMenu = new Portal(this.panel);
-
-        popup.add(settings);
-        this.rng = new Random();
-        List<Supplier<AbstractTool>> tools = Arrays.asList(
-            () -> new Ruler(rng),
-            () -> new Area(rng),
-            () -> new Circle(rng),
-            () -> new Polyline(rng));
-        this.addTools(popup, tools);
+    private void add_popup_menu_listener(JMenuItem save, JMenuItem rename, JMenuItem settings, List<Supplier<AbstractTool>> tools) {
         popup.addPopupMenuListener(new PopupMenuListener() {
                                        @Override
                                        public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
