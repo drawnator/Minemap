@@ -72,6 +72,8 @@ public class MapManager {
 
         add_mouse_listener_left_tool();
 
+        add_mouse_listener_left_cursor();
+
     private void add_mouse_motion_listener_clicked() {
         this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
             if (this.mousePointer == null) return;
@@ -105,6 +107,15 @@ public class MapManager {
 
         // update initial so we don't have a weird black box at the top left corner
         SwingUtilities.invokeLater(updateInit());
+    private void add_mouse_listener_left_cursor() {
+        this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                if (selectedTool == null) {
+                    this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+                }
+            }
+        }));
+    }
 
     private void add_mouse_listener_left_tool() {
         this.panel.addMouseListener(Events.Mouse.onPressed(e -> {
