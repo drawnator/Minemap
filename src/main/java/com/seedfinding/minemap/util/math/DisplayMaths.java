@@ -228,10 +228,8 @@ public class DisplayMaths {
         Rectangle rectangle = shape.getBounds();
         List<BPos> bPosList = new ArrayList<>();
         Function4<Shape, Integer, Integer, Boolean> test = Shape::contains;
-        if (shape instanceof Polygon) {
-            if (nPoints <= 2) {
-                test = (s, x, y) -> s.intersects(x, y, 1, 1);
-            }
+        if (shape instanceof Polygon && nPoints <= 2) {
+            test = (s, x, y) -> s.intersects(x, y, 1, 1);
         }
         for (int x = 0; x < rectangle.getWidth(); x++) {
             int X = (int) (rectangle.getX() + x);
