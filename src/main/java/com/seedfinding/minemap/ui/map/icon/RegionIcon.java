@@ -44,17 +44,18 @@ public class RegionIcon extends AbstractStaticIcon {
             for (int z = fragZMin - increment; z < fragZMax + increment; z += increment) {
                 RegionStructure.Data<?> data = structure.at(x >> 4, z >> 4);
                 CPos pos = structure.getInRegion(worldSeedWithSalt, data.regionX, data.regionZ, rand);
-                if (pos != null) {
-                    BPos currentPos = blockPosTranslation().apply(pos.toBlockPos().add(9, 0, 9));
-                    if (Configs.USER_PROFILE.getUserSettings().structureMode) {
+                if (pos == null) return;
+                BPos currentPos = blockPosTranslation().apply(pos.toBlockPos().add(9, 0, 9));
+                if (Configs.USER_PROFILE.getUserSettings().structureMode) {
+                    positions.add(currentPos);
+                    return;
+                }
+                if (structure.canSpawn(pos.getX(), pos.getZ(), this.getContext().getBiomeSource(getDimension()))) {
+                    TerrainGenerator generator = this.getContext().getTerrainGenerator(structure).getFirst();
+                    if (generator == null) {
                         positions.add(currentPos);
-                    } else if (structure.canSpawn(pos.getX(), pos.getZ(), this.getContext().getBiomeSource(getDimension()))) {
-                        TerrainGenerator generator = this.getContext().getTerrainGenerator(structure).getFirst();
-                        if (generator == null) {
-                            positions.add(currentPos);
-                        } else if (structure.canGenerate(pos.getX(), pos.getZ(), generator)) {
-                            positions.add(currentPos);
-                        }
+                    } else if (structure.canGenerate(pos.getX(), pos.getZ(), generator)) {
+                        positions.add(currentPos);
                     }
                 }
 
