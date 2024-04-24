@@ -89,7 +89,9 @@ public class DisplayMaths {
         double area = 0.0;
         for (int i = 0; i < bPosList.size(); i++) {
             int j = (i + 1) % bPosList.size();
-            area += bPosList.get(i).getX() * bPosList.get(j).getZ() - bPosList.get(i).getZ() * bPosList.get(j).getX();
+            BPos this_point = bPosList.get(i);
+            BPos next_point = bPosList.get(j);
+            area += this_point.getX() * next_point.getZ() - this_point.getZ() * next_point.getX();
         }
         return Math.abs(area / 2.0);
     }
