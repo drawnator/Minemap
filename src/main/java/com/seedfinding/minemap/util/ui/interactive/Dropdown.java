@@ -93,16 +93,12 @@ public class Dropdown<E> extends JComboBox<String> {
     public void setSelectedItem(Object item) {
         super.setSelectedItem(item);
         // FIXME, this is so bad
-        if (item instanceof String) {
-            if (elements != null) {
+        if (item instanceof String && elements != null) {
                 E first = strings.get(item);
-                if (first instanceof TabGroup) {
-                    if (((TabGroup) first).isLazyLoaded()) {
+                if (first instanceof TabGroup && ((TabGroup) first).isLazyLoaded()) {
                         ((TabGroup) first).loadEffectively();
-                    }
 
                 }
-            }
         }
     }
 
