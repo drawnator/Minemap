@@ -73,7 +73,9 @@ public class SettingsMenu extends AbstractMenu {
         this.disableStrongholds.addChangeListener(e -> {
             Configs.USER_PROFILE.getUserSettings().disableStronghold = this.disableStrongholds.getState();
             MapPanel map = MineMap.INSTANCE.worldTabs.getSelectedMapPanel();
-            if ((!this.disableStrongholds.getState() && map != null) && (map.getContext() != null && map.getContext().getStarts() == null)) {
+            boolean enabled_stronghold = !this.disableStrongholds.getState();
+            boolean no_map = map != null;
+            if ((enabled_stronghold && no_map) && (map.getContext() != null && map.getContext().getStarts() == null)) {
                 map.getContext().calculateStarts(map);
             }
             Configs.USER_PROFILE.flush();
