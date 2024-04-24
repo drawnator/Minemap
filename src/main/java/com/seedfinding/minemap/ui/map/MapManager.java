@@ -66,78 +66,16 @@ public class MapManager {
         this.blocksPerFragment = blocksPerFragment;
         this.pixelsPerFragment = (int) (DEFAULT_PIXELS_PER_FRAGMENT * (this.blocksPerFragment / DEFAULT_REGION_SIZE));
 
-        this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
-            if (this.mousePointer == null) return;
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                int dx = e.getX() - this.mousePointer.x;
-                int dy = e.getY() - this.mousePointer.y;
-                this.mousePointer = e.getPoint();
-                this.centerX += dx;
-                this.centerY += dy;
-                this.panel.repaint();
-            }
-        }));
+        add_mouse_motion_listener_clicked();
 
-        this.panel.addMouseMotionListener(Events.Mouse.onMoved(e -> {
-            this.mousePointer = e.getPoint();
-            BPos pos = this.getMouseBPos();
-            int x = pos.getX();
-            int z = pos.getZ();
-            this.panel.scheduler.forEachFragment(fragment -> fragment.onHovered(x, z));
-
-            SwingUtilities.invokeLater(() -> {
-                this.panel.leftBar.tooltip.updateBiomeDisplay(x, z);
-                this.panel.leftBar.tooltip.tooltip.repaint();
-                this.panel.repaint();
-            });
-
-        }));
+        add_mouse_motion_listener_moved();
 
         // update initial so we don't have a weird black box at the top left corner
         SwingUtilities.invokeLater(updateInit());
 
-        this.panel.addMouseListener(Events.Mouse.onPressed(e -> {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                this.mousePointer = e.getPoint();
-                BPos pos = this.getMouseBPos();
-                this.panel.scheduler.forEachFragment(fragment -> fragment.onClicked(pos.getX(), pos.getZ()));
-                if (selectedTool == null) {
-                    ArrayList<Pair<Feature<?, ?>, List<BPos>>> features = FindOnMap.findFeaturesSelected();
-                    if (features != null && !features.isEmpty()) {
-                        for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
-                            Feature<?, ?> feature = featureListPair.getFirst();
-                            if (feature instanceof RegionStructure<?, ?>) {
-                                for (BPos bPos : featureListPair.getSecond()) {
-                                    this.generateChest(feature, bPos);
-                                }
-                            }
-                        }
-                    } else {
-                        this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-                    }
-                } else {
-                    // if tool has no more points to it
-                    if (!selectedTool.addPoint(pos)) {
-                        selectedTool = selectedTool.duplicate();
-                        toolsList.add(selectedTool);
-                        selectedTool.addPoint(pos);
-                    }
-                    // weird case when removed
-                    if (selectedTool.getPointsTraced() > 0 && toolsList.isEmpty()) {
-                        toolsList.add(selectedTool);
-                    }
-                }
-                this.panel.rightBar.tooltip.updateToolsMetrics();
-            }
-        }));
+        add_mouse_listener_left_tool();
 
-        this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                if (selectedTool == null) {
-                    this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-                }
-            }
-        }));
+        add_mouse_listener_left_cursor();
 
         this.panel.addMouseWheelListener(e -> {
             boolean isModifier = Configs.USER_PROFILE.getUserSettings().modifierDown.getModifier().apply(e);
@@ -183,12 +121,100 @@ public class MapManager {
             () -> new Circle(rng),
             () -> new Polyline(rng));
         this.addTools(popup, tools);
+        add_popup_menu_listener(save, rename, settings, tools);
+    }
+
+    private void add_mouse_motion_listener_clicked() {
+        this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
+            if (this.mousePointer == null) return;
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                int dx = e.getX() - this.mousePointer.x;
+                int dy = e.getY() - this.mousePointer.y;
+                this.mousePointer = e.getPoint();
+                this.centerX += dx;
+                this.centerY += dy;
+                this.panel.repaint();
+            }
+        }));
+    }
+
+    private void add_mouse_motion_listener_moved() {
+        this.panel.addMouseMotionListener(Events.Mouse.onMoved(e -> {
+            this.mousePointer = e.getPoint();
+            BPos pos = this.getMouseBPos();
+            int x = pos.getX();
+            int z = pos.getZ();
+            this.panel.scheduler.forEachFragment(fragment -> fragment.onHovered(x, z));
+
+            SwingUtilities.invokeLater(() -> {
+                this.panel.leftBar.tooltip.updateBiomeDisplay(x, z);
+                this.panel.leftBar.tooltip.tooltip.repaint();
+                this.panel.repaint();
+            });
+
+        }));
+    }
+
+    private void add_mouse_listener_left_cursor() {
+        this.panel.addMouseListener(Events.Mouse.onReleased(e -> {
+            if (SwingUtilities.isLeftMouseButton(e) && selectedTool == null) {
+                    this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            }
+        }));
+    }
+
+    private void add_mouse_listener_left_tool() {
+        this.panel.addMouseListener(Events.Mouse.onPressed(e -> {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                this.mousePointer = e.getPoint();
+                BPos pos = this.getMouseBPos();
+                this.panel.scheduler.forEachFragment(fragment -> fragment.onClicked(pos.getX(), pos.getZ()));
+                if (selectedTool == null) {
+                    ArrayList<Pair<Feature<?, ?>, List<BPos>>> features = FindOnMap.findFeaturesSelected();
+                    click_without_tool(features);
+                } else {
+                    click_with_tool(pos);
+                }
+                this.panel.rightBar.tooltip.updateToolsMetrics();
+            }
+        }));
+    }
+
+    private void click_with_tool(BPos pos) {
+        // if tool has no more points to it
+        if (!selectedTool.addPoint(pos)) {
+            selectedTool = selectedTool.duplicate();
+            toolsList.add(selectedTool);
+            selectedTool.addPoint(pos);
+        }
+        // weird case when removed
+        if (selectedTool.getPointsTraced() > 0 && toolsList.isEmpty()) {
+            toolsList.add(selectedTool);
+        }
+    }
+
+    private void click_without_tool(ArrayList<Pair<Feature<?, ?>, List<BPos>>> features) {
+        if (!features.equals(new ArrayList<>()) && !features.isEmpty()) {
+            for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
+                Feature<?, ?> feature = featureListPair.getFirst();
+                if (feature instanceof RegionStructure<?, ?>) {
+                    for (BPos bPos : featureListPair.getSecond()) {
+                        this.generateChest(feature, bPos);
+                    }
+                }
+            }
+        } else {
+            this.panel.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        }
+    }
+
+    private void add_popup_menu_listener(JMenuItem save, JMenuItem rename, JMenuItem settings, List<Supplier<AbstractTool>> tools) {
         popup.addPopupMenuListener(new PopupMenuListener() {
                                        @Override
                                        public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
                                            popup.removeAll();
                                            ArrayList<Pair<Feature<?, ?>, List<BPos>>> features = FindOnMap.findFeaturesSelected();
-                                           if (features != null && !features.isEmpty()) {
+                                           if (!features.equals(new ArrayList<>()) && !features.isEmpty()) {
                                                for (Pair<Feature<?, ?>, List<BPos>> featureListPair : features) {
                                                    processFeaturePositions(featureListPair);
                                                }

@@ -122,22 +122,20 @@ public class Portal {
                                                                    BPos offsetPos,
                                                                    Function<RuinedPortalGenerator, List<Pair<Block, BPos>>> posFn) {
         return e -> {
-            if (e == eventAction) {
-                if (visualizer != null && ruinedPortalGenerator != null && visualizer.isRunning()) {
-                    List<Pair<Block, BPos>> blocks = posFn.apply(ruinedPortalGenerator);
-                    if (blocks == null || blocks.isEmpty()) {
-                        visualizer.setText("Portal did not generate");
-                        visualizer.getBlockManager().scheduleDestroy();
-                        return;
-                    }
-                    Pair<HashMap<BPos, Block>, BPos> blockHashMap = getBlockHashmap(blocks, null);
+            if (e == eventAction && visualizer != null && ruinedPortalGenerator != null && visualizer.isRunning()) {
+                List<Pair<Block, BPos>> blocks = posFn.apply(ruinedPortalGenerator);
+                if (blocks == null || blocks.isEmpty()) {
+                    visualizer.setText("Portal did not generate");
                     visualizer.getBlockManager().scheduleDestroy();
-                    for (BPos pos : blockHashMap.getFirst().keySet()) {
-                        BPos p = pos.subtract(offsetPos).add(8, 0, 8);
-                        Block block = blockHashMap.getFirst().get(pos);
-                        BlockType type = block == Blocks.OBSIDIAN ? BlockType.OBSIDIAN : block == Blocks.CRYING_OBSIDIAN ? BlockType.CRYING_OBSIDIAN : BlockType.GRASS;
-                        visualizer.getBlockManager().scheduleBlock(p, type);
-                    }
+                    return;
+                }
+                Pair<HashMap<BPos, Block>, BPos> blockHashMap = getBlockHashmap(blocks, null);
+                visualizer.getBlockManager().scheduleDestroy();
+                for (BPos pos : blockHashMap.getFirst().keySet()) {
+                    BPos p = pos.subtract(offsetPos).add(8, 0, 8);
+                    Block block = blockHashMap.getFirst().get(pos);
+                    BlockType type = block == Blocks.OBSIDIAN ? BlockType.OBSIDIAN : block == Blocks.CRYING_OBSIDIAN ? BlockType.CRYING_OBSIDIAN : BlockType.GRASS;
+                    visualizer.getBlockManager().scheduleBlock(p, type);
                 }
             }
         };

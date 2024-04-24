@@ -201,14 +201,12 @@ public class AboutMenu extends AbstractMenu {
             textArea.setText(getAbout());
             textArea.setFont(new Font("Times", Font.PLAIN, 16));
             textArea.addHyperlinkListener(linkEvent -> {
-                if (linkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    if (Desktop.isDesktopSupported()) {
+                if (linkEvent.getEventType() == HyperlinkEvent.EventType.ACTIVATED && Desktop.isDesktopSupported()) {
                         try {
                             Desktop.getDesktop().browse(linkEvent.getURL().toURI());
                         } catch (IOException | URISyntaxException error) {
                             Logger.LOGGER.warning(String.format("URL could not be opened for %s, error: %s", linkEvent.getURL(), error));
                         }
-                    }
                 }
             });
             textArea.setCaretPosition(0);
