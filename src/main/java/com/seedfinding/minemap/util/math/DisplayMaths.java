@@ -208,10 +208,7 @@ public class DisplayMaths {
     }
 
     public static Color getRandomColor(Random rand) {
-        float r = rand.nextFloat();
-        float g = rand.nextFloat();
-        float b = rand.nextFloat();
-        return new Color(r, g, b);
+        return new Color(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
     }
 
     @FunctionalInterface
