@@ -67,6 +67,8 @@ public class MapManager {
         this.pixelsPerFragment = (int) (DEFAULT_PIXELS_PER_FRAGMENT * (this.blocksPerFragment / DEFAULT_REGION_SIZE));
 
         add_mouse_motion_listener_clicked();
+
+        add_mouse_motion_listener_moved();
     private void add_mouse_motion_listener_clicked() {
         this.panel.addMouseMotionListener(Events.Mouse.onDragged(e -> {
             if (this.mousePointer == null) return;
@@ -81,6 +83,7 @@ public class MapManager {
         }));
     }
 
+    private void add_mouse_motion_listener_moved() {
         this.panel.addMouseMotionListener(Events.Mouse.onMoved(e -> {
             this.mousePointer = e.getPoint();
             BPos pos = this.getMouseBPos();
@@ -95,6 +98,7 @@ public class MapManager {
             });
 
         }));
+    }
 
         // update initial so we don't have a weird black box at the top left corner
         SwingUtilities.invokeLater(updateInit());
